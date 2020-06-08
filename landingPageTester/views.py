@@ -129,7 +129,7 @@ t = datetime.utcnow()
 amzdate = t.strftime('%Y%m%dT%H%M%SZ')
 datestamp = t.strftime('%Y%m%d')
 canonical_uri = '/api'
-canonical_querystring = "Action=TrafficHistory&Range=1ResponseGroup=History&Url=" + url_check
+canonical_querystring = "Action=TrafficHistory&Range=1ResponseGroup=History&Url=" 
 canonical_querystring = sortQueryString(canonical_querystring)
 canonical_headers = 'host:' + host + '\n' + 'x-amz-date:' + amzdate + '\n'
 signed_headers = 'host;x-amz-date'
@@ -146,14 +146,14 @@ apikey = "goo1ibDWTh4DDdacQm0xH3xtqvehKroK6OPqyMPy"
 
 def webinfo(request):
     if  request.method == 'GET':
-        url_check = request.GET.get('site')
+        url_check = request.GET.get('url')
     headers = {'Accept':'application/xml',
                'Content-Type': content_type,
                'X-Amz-Date':amzdate,
                'Authorization': authorization_header,
                'x-amz-security-token': session_token,
                'x-api-key': apikey}
-    request_url = endpoint + canonical_uri + "?" + canonical_querystring
+    request_url = endpoint + canonical_uri + "?" + canonical_querystring + url_check
     r = requests.get(request_url, headers=headers)
     if response.status_code == 200:
         result = response.json()
