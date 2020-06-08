@@ -10,6 +10,8 @@ import json
 import requests
 
 # Create your views here.
+def index(requests):
+    return render(requests, 'index.html')
 
 @api_view(["POST"])
 def TestPage(url):

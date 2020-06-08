@@ -19,5 +19,6 @@ from landingPageTester import views as LPT_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('landingpagetester/', LPT_views.TestPage, name='LPT'),
+    path('', LPT_views.index, name='index'),
+    path('landingpagetester/', LPT_views.TestPage, name='testPage'),
 ]
