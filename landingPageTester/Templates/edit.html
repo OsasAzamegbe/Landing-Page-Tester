@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% load static %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Landing Page Tester</title>
@@ -16,70 +15,36 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
   </head>
   <body>
-    <div class="main light">
+    <div class="main">
       <div class="container">
         <h3 class="text-center display-4">
           Team Storm
         </h3>
-        {% if messages %} {% for message in messages %} {% if message.tags ==
-        "error" or message.tags == "debug" %}
-        <div class="alert alert-danger" align="center">{{ message }}</div>
-        {% else %}
-        <div class="alert alert-{{message.tags}}" align="center">
-          {{ message }}
-        </div>
-        {% endif %} {% endfor %} {% endif %}
         <p class="text-center text mb-3">
-          Please enter a valid url to analyze
+          Edit this url
         </p>
-
         <div class="form-section col-md-8 mx-auto">
           <div class="card">
-            <form action="{% url 'topsites' %}" method="POST">
-              {% csrf_token %}
+            <form action="" method="POST">
               <div class="form-group">
                 <input
-                  type="text"
+                  type="url"
                   class="form-control"
-                  placeholder="Enter URL here"
+                  placeholder="http(s)://www.google.com"
                   name="url"
+                  value="https://www.google.com"
                   required
                 />
               </div>
               <div class="form-group">
+                <a href="./index.html" class="btn btn-primary manage-btn"
+                  ><< Back</a
+                >
                 <button type="submit" class="btn btn-secondary float-right">
-                  Proceed
+                  Update
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-
-        <div class="result-section mt-4 col-md-8 mx-auto">
-          <h5 class="text-secondary display-6">Saved Lannding Pages</h5>
-          <div class="row">
-            {% if traffics %} {% for traffic in traffics %}
-            <div class="col-md-6">
-              <div class="result card p-2">
-                <div class="card-header">
-                  <a href="{{ traffic.page_url }}">{{ traffic.page_url }}</a>
-                </div>
-                <div class="card-body">
-                  <p>Page Views per Million: {{ traffic.stats }}</p>
-                </div>
-
-                <div class="btns">
-                  <a
-                    href="./manage.html"
-                    class="btn btn-primary manage-btn"
-                    >Manage Page</a
-                  >
-                  <a href="" class="btn btn-danger">Delete</a>
-                </div>
-              </div>
-            </div>
-            {% endfor %} {% endif %}
-            </div>
           </div>
         </div>
       </div>
@@ -136,7 +101,6 @@
       </div>
     </div>
 
-    
     <footer>
       <p>Copyright &copy; Team Storm HNGi7 2020</p>
     </footer>
