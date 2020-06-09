@@ -182,8 +182,7 @@ def webinfo(request):
                 Traffic.objects.filter(page_url=result_url).delete()
             traffic.save()
             all_traffic = Traffic.objects.all()
-            context = {
-                'result' : f'Site: {result_url} Page Views Per Million: {result_page_views_permillion}',
+            context = {            
                 'traffics': all_traffic
             }
             return render(request, 'index.html', context)
