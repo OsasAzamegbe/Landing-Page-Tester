@@ -159,14 +159,15 @@ def webinfo(request):
                'Authorization': authorization_header,
                'x-amz-security-token': session_token,
                'x-api-key': apikey}
-    request_url = "https://https://awis.api.alexa.com/api?"+url_check
+    request_url = "ttps://awis.api.alexa.com/api?"+canonical_querystring+url_check
     r = requests.get(request_url, headers=headers)
-    if response.status_code == 200:
-        result = response.json()
+    if r.status_code == 200:
+        result = r.json()
         result['success'] = True
-    else:
-        result['success'] = False
-    return render(request, 'index.html', result)
+    context = {
+
+    }
+    return render(request, 'index.html', context)
 
 
 
