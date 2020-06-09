@@ -19,7 +19,13 @@ from landingPageTester import views as LPT_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
     # path('', LPT_views.index, name='index'),
     path('test/', LPT_views.webinfo, name='topsites'),
     # path('landingpagetester/', LPT_views.TestPage, name='testPage'),
+=======
+    path('', LPT_views.index, name='index'),
+    path('test/', LPT_views.webinfo, name='topsites'),
+    path('landingpagetester/', LPT_views.TestPage, name='testPage'),
+>>>>>>> 1ef17553fc4c6befbb448da0661304dbc2e7814d
 ]
