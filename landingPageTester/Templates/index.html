@@ -22,7 +22,7 @@
                 </p>
                 <div class="form-section col-md-8 mx-auto">
                     <div class="card">
-                        <form action="">
+                        <form action="{% url 'topsites' %}">
                             <div class="form-group">
                                 <input
                                     type="url"
@@ -135,6 +135,8 @@
                 <div class="col"></div>
             </div>
         </div>
+{% comment %} <p>{{ result }}</p> {% endcomment %}
+{% if result %}
 
         <script src="{% static 'js/script.js' %}"></script>
     </body>
