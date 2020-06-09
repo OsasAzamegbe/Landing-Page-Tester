@@ -183,7 +183,7 @@ def webinfo(request):
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-            all_traffic = Traffic.objects.all()
+            all_traffic = Page.objects.all()
             context = {            
                 'traffics': all_traffic
             }
@@ -205,7 +205,7 @@ def get_status(request):
             return render(request, 'status.html', context)       
             
 def delete_url(request):
-    delete_urls= Traffic.objects.get(page_url=url)
+    delete_urls= Pages.objects.get(page_url=url)
     #delete_urls= Traffic.objects.get(page_url=url)
     if request.method == 'POST':
         delete_urls.delete()
