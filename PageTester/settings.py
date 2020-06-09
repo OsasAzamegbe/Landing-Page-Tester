@@ -56,7 +56,7 @@ ROOT_URLCONF = 'PageTester.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '/Templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'landingPageTester/Templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
