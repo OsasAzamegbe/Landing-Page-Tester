@@ -22,6 +22,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
+from .models import Traffic
 
 # Create your views here.
 
@@ -126,10 +127,10 @@ while True:
     exp_time = float(expiration)
     cur_time = time.mktime(datetime.now().timetuple())
     user = "remiljw@gmail.com"
-    if cur_time > exp_time:
-        refresh_credentials(user)
-    else:
-        break
+    # if cur_time > exp_time:
+    #     refresh_credentials(user)
+    # else:
+    break
 
 
 # Create a date for headers and the credential string
@@ -157,7 +158,7 @@ def webinfo(request):
         return render(request, 'index.html')
     if request.method == 'POST':
         url_check = request.POST.get('url')
-    try:
+        # try:
         headers = {'Accept':'application/xml',
                 'Content-Type': content_type,
                 'X-Amz-Date':amzdate,
@@ -166,14 +167,29 @@ def webinfo(request):
                 'x-api-key': apikey}
         request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
         r = requests.get(request_url, headers=headers)
-        result = r.text
-        context = {
-            'result' : result
-        }
-        return render(request, 'index.html', context)
-    except:
-        messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
-        return HttpResponseRedirect('/test/')
+        soup = BeautifulSoup(r.text, 'html.parser')
+        result_url = soup.site.get_text()
+        try:
+            result_page_views_permillion = soup.pageviews.permillion.get_text()
+            
+        except:
+            result_page_views_permillion = "0.0"
+            
+        finally:
+            traffic = Traffic(page_url=result_url, stats=float(result_page_views_permillion))
+            traffic_exists = Traffic.objects.filter(page_url=result_url).exists()
+            if traffic_exists:
+                Traffic.objects.filter(page_url=result_url).delete()
+            traffic.save()
+            all_traffic = Traffic.objects.all()
+            context = {
+                'result' : f'Site: {result_url} Page Views Per Million: {result_page_views_permillion}',
+                'traffics': all_traffic
+            }
+            return render(request, 'index.html', context)
+        # except:
+        #     messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
+        #     return HttpResponseRedirect('/test/')
 
 
 

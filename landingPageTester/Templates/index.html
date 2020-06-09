@@ -50,49 +50,28 @@
                         </form>
                     </div>
                 </div>
-
+                {% if site %}
+                    {{ site }}
+                {% endif %}
                 <div class="result-section mt-4 col-md-8 mx-auto">
-                    <h5 class="text-secondary display-6">Result Analysis</h5>
-                    <div class="result card my-3">
-                        <div class="row p-2 text-success">
-                            <div class="col-8 col-md-10">
-                                <p>
-                                    {% if result %}
-                                        {{ result }}
-                                    {% endif %}
-                                </p>
+                    <h5 class="text-secondary display-6">Result Analysis</h5>                    
+                    {% if traffics %}
+                        {% for traffic in traffics %}
+                            <div class="result card my-3">
+                                <div class="row p-2 text-primary">
+                                    <div class="col-7 col-md-7">
+                                        <p>                                   
+                                            Site: {{ traffic.page_url }}       
+                                        </p>
+                                    </div>
+                                    <div class="col-5 col-md-5">
+                                        <p>Page Views per Million: {{ traffic.stats }}</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-4 col-md-2">
-                                <p>Rank: 23456</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="result card my-3">
-                        <div class="row p-2 text-primary">
-                            <div class="col-8 col-md-10">
-                                <p>
-                                    https://www.google.com
-                                </p>
-                            </div>
-                            <div class="col-4 col-md-2">
-                                <p>Rank: 1200</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="result card">
-                        <div class="row p-2 text-primary">
-                            <div class="col-8 col-md-10">
-                                <p>
-                                    https://www.google.com
-                                </p>
-                            </div>
-                            <div class="col-4 col-md-2">
-                                <p>Rank: 1000</p>
-                            </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% endif %}
+                    
                 </div>
             </div>
         </div>
