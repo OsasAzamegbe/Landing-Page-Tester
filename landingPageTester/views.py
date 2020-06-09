@@ -22,7 +22,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import Traffic, Page
+from .models import *
 
 # Create your views here.
 
@@ -205,8 +205,7 @@ def get_status(request):
             return render(request, 'status.html', context)       
             
 def delete_url(request):
-    delete_urls= Pages.objects.get(page_url=url)
-    #delete_urls= Traffic.objects.get(page_url=url)
+    delete_urls= Page.objects.get(page_url=url)
     if request.method == 'POST':
         delete_urls.delete()
         return redirect('index')
