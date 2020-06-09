@@ -8,7 +8,7 @@ from configparser import ConfigParser
 from future.standard_library import install_aliases
 install_aliases()
 from urllib.parse import parse_qs, quote_plus
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -190,6 +190,17 @@ def webinfo(request):
         #     messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
         #     return HttpResponseRedirect('/test/')
 
+def delete_url(request):
+    delete_urls= Traffic.objects.get(page_url=url)
+    #delete_urls= Traffic.objects.get(page_url=url)
+    if request.method == 'POST':
+        delete_urls.delete()
+        return redirect('index')
+
+    context = {'delete_urls':delete_urls}
+
+    return render(request,'delete_form.html',context)
+    
 
 
 

@@ -22,4 +22,5 @@ urlpatterns = [
     # path('', LPT_views.index, name='index'),
     path('test/', LPT_views.webinfo, name='topsites'),
     # path('landingpagetester/', LPT_views.TestPage, name='testPage'),
+    path('delete_url/',LPT_views.delete_url, name='delete_url'),
 ]
