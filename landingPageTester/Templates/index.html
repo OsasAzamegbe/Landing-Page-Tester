@@ -21,21 +21,21 @@
         <h3 class="text-center display-4">
           Team Storm
         </h3>
-        {% if messages %} {% for message in messages %} {% if message.tags ==
+        {% comment %} {% if messages %} {% for message in messages %} {% if message.tags ==
         "error" or message.tags == "debug" %}
         <div class="alert alert-danger" align="center">{{ message }}</div>
-        {% else %}
-        <div class="alert alert-{{message.tags}}" align="center">
-          {{ message }}
+        {% comment %} {% else %} {% endcomment %}
+        {% comment %} <div class="alert alert-{{message.tags}}" align="center">
+          {{ message }} {% endcomment %} 
         </div>
-        {% endif %} {% endfor %} {% endif %}
+        {% comment %} {% endif %} {% endfor %} {% endif %} {% endcomment %}
         <p class="text-center text mb-3">
           Please enter a valid url to analyze
         </p>
 
         <div class="form-section col-md-8 mx-auto">
           <div class="card">
-            <form action="{% url 'topsites' %}" method="POST">
+            <form action="{% url 'addpage' %}" method="POST">
               {% csrf_token %}
               <div class="form-group">
                 <input
@@ -65,7 +65,8 @@
                   <a href="{{ traffic.page_url }}">{{ traffic.page_url }}</a>
                 </div>
                 <div class="card-body">
-                  <p>Page Views per Million: {{ traffic.stats }}</p>
+                  <p>Rank: {{ traffic.page_rank }}
+                  <p>Page Views per Million: {{ traffic.page_status }}</p>
                 </div>
 
                 <div class="btns">
