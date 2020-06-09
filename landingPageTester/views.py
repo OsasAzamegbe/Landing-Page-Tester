@@ -22,7 +22,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import *
+from .models import Traffic, Page
 
 # Create your views here.
 
