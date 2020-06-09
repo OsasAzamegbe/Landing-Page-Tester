@@ -151,21 +151,21 @@ apikey = "goo1ibDWTh4DDdacQm0xH3xtqvehKroK6OPqyMPy"
 
 
 def webinfo(request):
+    urlsite ={}
     if  request.method == 'GET':
-        url_check = request.GET.get('url')
+        urlsite = request.GET.get('url')
+    query = canonical_querystring+ str(urlsite)
     headers = {'Accept':'application/xml',
                'Content-Type': content_type,
                'X-Amz-Date':amzdate,
                'Authorization': authorization_header,
                'x-amz-security-token': session_token,
                'x-api-key': apikey}
-    request_url = "https://awis.api.alexa.com/api?"+canonical_querystring+url_check
+    request_url = "https://awis.api.alexa.com/api?%"+query
     r = requests.get(request_url, headers=headers)
-    if r.status_code == 200:
-        result = r.json()
-        result['success'] = True
+    alt = r.text
     context = {
-
+        'result' : alt
     }
     return render(request, 'index.html', context)
 
