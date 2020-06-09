@@ -1,0 +1,9 @@
+python 3
+django
+djangorestframework
+bs4
+requests
+boto3
+configparser
+future
+

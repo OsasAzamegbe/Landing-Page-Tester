@@ -17,17 +17,27 @@
                 <h3 class="text-center display-4">
                     Team Storm
                 </h3>
+                {% if messages %}
+                    {% for message in messages %}
+                            {% if message.tags == "error" or message.tags == "debug" %}
+                                <div class="alert alert-danger" align="center">{{ message }}</div>
+                            {% else %}
+                                <div class="alert alert-{{message.tags}}" align="center">{{ message }}</div>
+                            {% endif %}
+                    {% endfor %}
+                {% endif %}
                 <p class="text-center text mb-3">
-                    Please enter a valid url to analyze
+                    Please enter a valid url to analyze 
                 </p>
+                
                 <div class="form-section col-md-8 mx-auto">
                     <div class="card">
-                        <form action="{% url 'topsites' %}">
+                        <form action="{% url 'topsites' %}" method='POST'>{% csrf_token %}
                             <div class="form-group">
                                 <input
-                                    type="url"
+                                    type="text"
                                     class="form-control"
-                                    placeholder="http(s)://www.google.com"
+                                    placeholder="Enter URL here"
                                     name="url"
                                     required
                                 />
@@ -47,7 +57,9 @@
                         <div class="row p-2 text-success">
                             <div class="col-8 col-md-10">
                                 <p>
-                                    https://www.google.com
+                                    {% if result %}
+                                        {{ result }}
+                                    {% endif %}
                                 </p>
                             </div>
                             <div class="col-4 col-md-2">
@@ -135,8 +147,7 @@
                 <div class="col"></div>
             </div>
         </div>
-{% comment %} <p>{{ result }}</p> {% endcomment %}
-{% if result %}
+        
 
         <script src="{% static 'js/script.js' %}"></script>
     </body>
