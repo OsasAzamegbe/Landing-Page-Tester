@@ -135,7 +135,7 @@ t = datetime.utcnow()
 amzdate = t.strftime('%Y%m%dT%H%M%SZ')
 datestamp = t.strftime('%Y%m%d')
 canonical_uri = '/api'
-canonical_querystring = "Action=TrafficHistory&Range=1ResponseGroup=History&Url=" 
+canonical_querystring = "Action=TrafficHistory&Range=1&ResponseGroup=History&Url=lucidblog.com" 
 canonical_querystring = sortQueryString(canonical_querystring)
 canonical_headers = 'host:' + host + '\n' + 'x-amz-date:' + amzdate + '\n'
 signed_headers = 'host;x-amz-date'
@@ -147,7 +147,7 @@ string_to_sign = algorithm + '\n' +  amzdate + '\n' +  credential_scope + '\n' +
 signing_key = getSignatureKey(secret_key, datestamp, region, service)
 signature = hmac.new(signing_key, (string_to_sign).encode('utf-8'), hashlib.sha256).hexdigest()
 authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' +  'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature
-apikey = "goo1ibDWTh4DDdacQm0xH3xtqvehKroK6OPqyMPy"
+apikey = "Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO"
 
 
 def webinfo(request):
@@ -159,13 +159,12 @@ def webinfo(request):
                'Authorization': authorization_header,
                'x-amz-security-token': session_token,
                'x-api-key': apikey}
-    request_url = "https://awis.api.alexa.com/api?"+canonical_querystring+url_check
+    request_url = "https://awis.api.alexa.com/api?{}".format(canonical_querystring)
     r = requests.get(request_url, headers=headers)
-    if r.status_code == 200:
-        result = r.json()
-        result['success'] = True
+    # if r.status_code == 200:
+    result = r.json
     context = {
-
+        'result' : result
     }
     return render(request, 'index.html', context)
 
