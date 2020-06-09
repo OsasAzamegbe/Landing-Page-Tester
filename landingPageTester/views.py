@@ -22,7 +22,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import Traffic
+from .models import Traffic, Page
 
 # Create your views here.
 
@@ -168,6 +168,8 @@ def webinfo(request):
         request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
         r = requests.get(request_url, headers=headers)
         soup = BeautifulSoup(r.text, 'html.parser')
+        status_code = soup.responsestatus.statuscode.get_text()
+        rank = soup.rank.get_text()
         result_url = soup.site.get_text()
         try:
             result_page_views_permillion = soup.pageviews.permillion.get_text()
@@ -176,12 +178,12 @@ def webinfo(request):
             result_page_views_permillion = "0.0"
             
         finally:
-            traffic = Traffic(page_url=result_url, stats=float(result_page_views_permillion))
-            traffic_exists = Traffic.objects.filter(page_url=result_url).exists()
+            traffic = Page(page_url=result_url, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+            traffic_exists = Page.objects.filter(page_url=result_url).exists()
             if traffic_exists:
-                Traffic.objects.filter(page_url=result_url).delete()
+                Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-            all_traffic = Traffic.objects.all()
+            all_traffic = Page.objects.all()
             context = {            
                 'traffics': all_traffic
             }
@@ -190,8 +192,20 @@ def webinfo(request):
         #     messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
         #     return HttpResponseRedirect('/test/')
 
+def get_status(request):
+            if  request.method == 'GET':
+                return render(request, 'index.html')
+            if request.method == 'POST':
+                url_check = request.POST.get('url')
+            Page = Page.objects.filter(page_url=url_check)
+            status = Page.page_status
+            context= {
+                'status': status
+            }
+            return render(request, 'status.html', context)       
+            
 def delete_url(request):
-    delete_urls= Traffic.objects.get(page_url=url)
+    delete_urls= Pages.objects.get(page_url=url)
     #delete_urls= Traffic.objects.get(page_url=url)
     if request.method == 'POST':
         delete_urls.delete()
