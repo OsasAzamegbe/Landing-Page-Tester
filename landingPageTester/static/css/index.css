@@ -1,83 +1,163 @@
+body {
+  font-family: 'Rubik', sans-serif;
+}
+
 p {
-    margin: 0;
+  margin: 0;
+  font-family: 'Rubik', sans-serif;
+}
+
+.btn {
+  border-radius: 40px;
 }
 
 .display-6 {
-    font-size: 1.3rem;
-    font-weight: 400;
-    text-transform: uppercase;
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-transform: uppercase;
 }
 
 .main {
-    position: relative;
-    background: #1f1a1a;
-    bottom: 0;
-    right: 0;
-    top: 0;
-    left: 0;
-    height: 100%;
-    min-height: 100vh;
-    padding-top: 2rem;
-    transition: all 300ms ease;
+  position: relative;
+  background: #1f1a1a;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  left: 0;
+  height: 100%;
+  min-height: 100vh;
+  padding-top: 2rem;
+  transition: all 300ms ease;
 }
 
 .main h3 {
-    color: #f3f3f3;
+  color: #f3f3f3;
+  font-family: 'Pacifico', cursive;
 }
 
 .main .text {
-    color: #ccc;
+  color: #ccc;
 }
 
 .form-section .card {
-    margin-top: 0;
-    padding: 1.5rem 1.5rem 0.8rem;
-    background: #75736742;
-    box-shadow: 0px 0px 0.3rem #999595;
+  margin-top: 0;
+  padding: 1.5rem 1.5rem 0.8rem;
+  background: #75736742;
+  box-shadow: 0px 0px 0.3rem #999595;
+  border-top: 3px solid #0b84a8;
+}
+
+a {
+  text-decoration: none;
+  color: #0b84a8;
+}
+
+a:hover {
+  color: #065168;
+  text-decoration: none;
+}
+
+.result-section {
+  margin-top: 2rem;
 }
 
 .result-section .card {
-    transition: all 300ms;
+  transition: all 300ms;
+  background: #383636;
+  color: #fff;
+  margin: 1rem 0;
+  border-top: 4px solid #0b84a8;
+}
+
+.btns {
+  margin: 1rem 0.3rem 0;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #0b84a8;
+  padding-top: 1rem;
+}
+
+.edit-btn {
+  background: #065168;
+  color: #fff;
+}
+
+.del-btn {
+  background: #7a140c;
+  color: #fff;
 }
 
 .footer-section {
-    position: fixed;
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
+  position: fixed;
+  top: 1rem;
+  right: -0.3rem;
 }
 
 .switch svg {
-    width: 50px;
-    height: 50px;
+  width: 30px;
+  height: 30px;
 }
 
 .switch svg {
-    fill: #fedb41;
+  fill: #fedb41;
 }
 
 .switch.off svg {
-    fill: black;
+  fill: black;
 }
 
 .main.light {
-    background: #fff;
-    color: #000;
+  background: #fff;
+  color: #000;
 }
 
 .main.light h3 {
-    color: #212226;
+  color: #212226;
 }
 
 .main.light .text {
-    color: #aaa;
+  color: #aaa;
 }
 
 .main.light .form-section .card {
-    background: #fff;
-    box-shadow: 0 0 0.1rem #4e4d4d;
+  background: #fff;
+  box-shadow: 0 0 0.1rem #4e4d4d;
 }
 
 .main.light .result-section .card {
-    background: #212226;
+  background: #212226;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: #000;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+footer.light {
+  background: #fff;
+  color: #212226;
+  border-top: 1px solid #000;
+}
+
+.manage p:not(:first-child) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #000;
+  background: #000;
+}
+
+.manage span {
+  border-radius: 50%;
+  border: 1px solid #fedb41;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
