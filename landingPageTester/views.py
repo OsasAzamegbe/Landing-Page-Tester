@@ -1,4 +1,4 @@
-import base64, hashlib, hmac
+import base64, hashlib, hmac, os
 import logging, getopt
 import boto3
 import getpass
@@ -109,20 +109,25 @@ def sortQueryString(queryString):
         sortedQueryString = sortedQueryString + sep + key + "=" + quote_plus(queryTuples[key][0])
         sep="&"
     return sortedQueryString
+user = 'remiljw@gmail.com'
 
 config = ConfigParser()
 config.read(credentials_file)
+if not os.path.isfile(credentials_file):
+        refresh_credentials(user)
+while True:
 
-access_key = "ASIA2TRI3LACDYYL26OK"
-secret_key = "feVltyVtGpxqpYFMF+ik4dusECP8y4DhA6Eyl6mM"
-session_token = "IQoJb3JpZ2luX2VjEIr//////////wEaCXVzLWVhc3QtMSJGMEQCIEhF5NwO3dCUBNNkDBf985MShHn/yczYzbpUDzzELsOiAiARnRF32Hf18wl8YN8BVdmdI2kb5jxHQJaIe+ZBZ6qM6CqHBAjy//////////8BEAEaDDcyOTE1NjM3NjU4MCIMEBsLkwK+R1KEfMu1KtsDiJCblvQz7cPOxHl5wtt4lpEBY3OJnAFwrOY+fJhus/T+egtSp6pKRXGJeFM98a02MfhtGbxzQE3aATWWK/8repwUe05y5b3kARNxqAq4TpCFDWd/OZMDvyO6pKEXa6vPpjUpWJSql1XjGAMLSAYe6FNi6gXnG6Oto/l7RlPMOXuovxMoF14EQho9s06OBPf9CDDvJvsi0j9NrZ9VKZ3GjBHYsubZcqbfS1UPh7VY552r5cLJIUnApjupQ27aHC/DDmOfV+ZvaLTEr6hpyhbwTLqj5GBIB0FGwIfj9iaminLroMrtxK/29u4TOlBJhhLzxNiJMFd5b3IVIRLvStnCeKQQuCYWp34OyBpDuiddoICQYtFI3QH+rOcuT4pu/buXB651BUt4Ekb2UhEm2kwqwY8dImmT59SFx8tjrJa4b0ZOhYMPIIrcddrcwj4lgQsZV9iW0T+0bc5b69pByEkFMiM+ETyA+hR0OPLVOUbInui8eN2Anvp2zYwXzVGbGFidHxuTBkoP4BmR79F8F+0XjFPc7gcFmBA+uDJw++m+7I4tsd3SsQzyahSwLDgFp67BCzow3QmbfKKit1hBBbpzvBgKqFeHfndVFw0e+RxgoVvNDa19+WxYPv0mRjCu4Pn2BTrMAsfMLUy7TrAP0NQ4kBj3RpSAPXDcDWWE1xHbyYPFMZJTc+f/xAZEpGTDWA8wzRAg3X4eQ9305YKGVj6ThdzdjfldoApyQ+kIMq65jsXQqAxlsRcw8JcVlf9Q7n7MOIngZm6wMvoQPiVEDlP654/BY9+iwPzLDcoLj2ES5BoAcWOmxvBXNDwEqGKj0liS/Ry+fGS0gIEWjOMVomNsVV4xEomHLy2eDMf3Q8ALyGjct+YibxwCf9aClTMEB7UmmrL6KbE8pC2HHLScbj+DWvO21vslx2//+55slflpaTDUpBGgBII/cgHDvsY+v28AU4PYB60TiIleNfSMh/b6ANElWMtoSjcWPKQHczBHiYXuF/0Y9w77NC2hp7SZXi5ozjXl+IkRk1Zplda91CFj9i0rFpIANEpPCi9ntM2YJva9vH9CI8hgG3KZ88vrg6iy"
-expiration = "1591639614.0"
-
-exp_time = float(expiration)
-cur_time = time.mktime(datetime.now().timetuple())
-user = "remiljw@gmail.com"
-if cur_time > exp_time:
-    refresh_credentials(user)
+    access_key = config.get("DEFAULT", "aws_access_key_id")
+    secret_key = config.get("DEFAULT", "aws_secret_access_key")
+    session_token = config.get("DEFAULT", "aws_session_token")
+    expiration = config.get("DEFAULT", "expiration")
+    exp_time = float(expiration)
+    cur_time = time.mktime(datetime.now().timetuple())
+    user = "remiljw@gmail.com"
+    if cur_time > exp_time:
+        refresh_credentials(user)
+    else:
+        break
 
 
 # Create a date for headers and the credential string
@@ -154,7 +159,7 @@ def webinfo(request):
                'Authorization': authorization_header,
                'x-amz-security-token': session_token,
                'x-api-key': apikey}
-    request_url = "https://https://ats.api.alexa.com/api?" + canonical_querystring 
+    request_url = "https://https://awis.api.alexa.com/api?"+url_check
     r = requests.get(request_url, headers=headers)
     if response.status_code == 200:
         result = response.json()
