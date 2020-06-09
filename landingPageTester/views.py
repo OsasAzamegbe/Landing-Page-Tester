@@ -204,8 +204,8 @@ def get_status(request):
             }
             return render(request, 'status.html', context)       
             
-def delete_url(request):
-    delete_urls= Page.objects.get(page_url=url)
+def delete_url(request,pk):
+    delete_urls= Page.objects.get(id=pk)
     if request.method == 'POST':
         delete_urls.delete()
         return redirect('index')
