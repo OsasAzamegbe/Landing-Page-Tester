@@ -3,6 +3,7 @@ import logging, getopt
 import boto3
 import getpass
 import time
+
 from configparser import ConfigParser
 from future.standard_library import install_aliases
 install_aliases()
@@ -12,13 +13,14 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import Http404, JsonResponse
+from django.contrib import messages
+from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
 # from . import credentials
 from datetime import datetime
 import json
-
+from bs4 import BeautifulSoup
 import requests
 
 # Create your views here.
@@ -135,7 +137,7 @@ t = datetime.utcnow()
 amzdate = t.strftime('%Y%m%dT%H%M%SZ')
 datestamp = t.strftime('%Y%m%d')
 canonical_uri = '/api'
-canonical_querystring = "Action=TrafficHistory&Range=1&ResponseGroup=History&Url=lucidblog.com" 
+canonical_querystring = "Action=TrafficHistory&Range=1&ResponseGroup=History" 
 canonical_querystring = sortQueryString(canonical_querystring)
 canonical_headers = 'host:' + host + '\n' + 'x-amz-date:' + amzdate + '\n'
 signed_headers = 'host;x-amz-date'
@@ -152,21 +154,26 @@ apikey = "Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO"
 
 def webinfo(request):
     if  request.method == 'GET':
-        url_check = request.GET.get('url')
-    headers = {'Accept':'application/xml',
-               'Content-Type': content_type,
-               'X-Amz-Date':amzdate,
-               'Authorization': authorization_header,
-               'x-amz-security-token': session_token,
-               'x-api-key': apikey}
-    request_url = "https://awis.api.alexa.com/api?{}".format(canonical_querystring)
-    r = requests.get(request_url, headers=headers)
-    # if r.status_code == 200:
-    result = r.json
-    context = {
-        'result' : result
-    }
-    return render(request, 'index.html', context)
+        return render(request, 'index.html')
+    if request.method == 'POST':
+        url_check = request.POST.get('url')
+    try:
+        headers = {'Accept':'application/xml',
+                'Content-Type': content_type,
+                'X-Amz-Date':amzdate,
+                'Authorization': authorization_header,
+                'x-amz-security-token': session_token,
+                'x-api-key': apikey}
+        request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
+        r = requests.get(request_url, headers=headers)
+        result = r.text
+        context = {
+            'result' : result
+        }
+        return render(request, 'index.html', context)
+    except:
+        messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
+        return HttpResponseRedirect('/test/')
 
 
 
