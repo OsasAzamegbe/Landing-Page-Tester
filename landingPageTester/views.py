@@ -240,8 +240,11 @@ def edit_url(request):
         
         finally:
             page_domain = tldextract.extract(result_url).domain
+
             traffic = Page.objects.filter(page_url=url_check).update(page_url=result_url, page_name=page_domain,page_traffic=float(result_page_views_permillion),
                            page_status=int(status_code), page_rank=rank)
+            # Page.objects.get()
+            # traffic.save()
             return HttpResponseRedirect(reverse('index'))
 def index(request):
     all_pages = Page.objects.all()
