@@ -13,9 +13,10 @@
               >
             </div>
             <div class="card-body manage">
+          
               <p>{{ page.rank }}</p>
               <p>
-                <a href="" class="btn btn-primary">Get Traffic</a>
+                <a href="/get_status/{{page.id}}/" method='POST' class="btn btn-primary">{% csrf_token %}Get Status</a>
                 <span>{{page.page_traffic}}</span>
               </p>
               <p>

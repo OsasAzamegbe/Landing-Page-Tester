@@ -23,6 +23,7 @@ import json
 from bs4 import BeautifulSoup
 import requests
 from .models import Traffic, Page
+import tldextract
 
 # Create your views here.
 
@@ -178,14 +179,13 @@ def add_page(request):
             result_page_views_permillion = "0.0"
 
         finally:
-            traffic = Page(page_url=result_url, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+            page_domain = tldextract.extract(result_url).domain
+            traffic = Page(page_url=result_url, page_name=page_domain, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
             traffic_exists = Page.objects.filter(page_url=result_url).exists()
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-        return HttpResponseRedirect(reverse('index'))    
-
-
+        return HttpResponseRedirect(reverse('index'))
 
 
 def get_status(request):
