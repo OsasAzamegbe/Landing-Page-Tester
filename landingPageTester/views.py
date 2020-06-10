@@ -207,20 +207,6 @@ def delete_page(request, pk):
         delete_urls.delete()
     return HttpResponseRedirect(reverse('index'))
     
-def get_page_signups(request):
-	if  request.method == 'GET':
-		return render(request, 'index.html')
-	try:
-		if request.method == 'POST':
-			url_check = request.POST['url']
-	except KeyError:
-		url_check = None
-
-	Page = Page.objects.filter(page_signups=url_check)
-	signups_no = Page.page_signups
-	context = {"signups_no": signups_no}
-	return render(request, "manage.html", context)
-
 
 def index(request):
     all_pages = Page.objects.all()
