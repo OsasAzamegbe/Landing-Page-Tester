@@ -154,7 +154,6 @@ apikey = "Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO"
 
 
 def webinfo(request):
-<<<<<<< HEAD
 	if  request.method == 'GET':
 		return render(request, 'index.html')
 	if request.method == 'POST':
@@ -169,6 +168,8 @@ def webinfo(request):
 		request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
 		r = requests.get(request_url, headers=headers)
 		soup = BeautifulSoup(r.text, 'html.parser')
+		status_code = soup.responsestatus.statuscode.get_text()
+        rank = soup.rank.get_text()
 		result_url = soup.site.get_text()
 		try:
 			result_page_views_permillion = soup.pageviews.permillion.get_text()
@@ -230,51 +231,3 @@ def get_page_signups(request):
 	
 
 
-
-
-# def index(requests):
-#     return render(requests, 'index.html')
-
-# @api_view(["POST"])
-# def TestPage(url):
-#     try:
-#         if type(url) != str:
-#             url = str(url)
-#         reply = requests.get(url)
-#         return JsonResponse("The status code is -", reply.status_code)
-#     except ValueError as e:
-#         return Response(e.args[0], status.HTTP_400_BAD_REQUEST)
-
-# def webinfo(request):
-#     content_type = 'application/xml'
-#     apikey = 'hMOokdXqvI2K7LOva7sU42YVb64oXawZ9N6ROoea'
-#     access_key = 'ASIA2TRI3LACDYYL26OK'
-#     t = datetime.utcnow()
-#     secret_key = 'feVltyVtGpxqpYFMF+ik4dusECP8y4DhA6Eyl6mM'
-#     amzdate = t.strftime('%Y%m%dT%H%M%SZ')
-#     datestamp = t.strftime('%Y%m%d') 
-#     region = 'us-east-1'
-#     service = 'execute-api'
-#     credential_scope = datestamp + '/' + region + '/' + service + '/' + 'aws4_request'
-#     signed_headers = 'host;x-amz-date'
-#     signature = 
-#     session_token = 
-#      algorithm = 'AWS4-HMAC-SHA256'
-#     authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' +  'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature
-#     if request.method == 'GET':
-#         url =  request.GET.get('site')
-#         endpoint = 'https://ats.api.alexa.com/api?'
-#         headers = {'Accept':'application/xml',
-#                'Content-Type': content_type,
-#                'X-Amz-Date':amzdate,
-#                'Authorization': authorization_header,
-#                'x-amz-security-token': session_token,
-#                'x-api-key': apikey
-#               }
-#     response = requests.get(url, headers=headers)
-#     if response.status_code == 200:
-#         result = response.json()
-#         result['success'] = True
-#     else:
-#         result['success'] = False
-#     return render(request, 'index.html', result)
