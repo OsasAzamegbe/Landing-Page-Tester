@@ -5,6 +5,7 @@
         <div class="col-md-8 mx-auto">
           <div class="result card p-2">
             <div class="card-header">
+             <h4>{{ page.page_name }}</h4>
               <a href="{{page.page_url}}">{{ page.page_url }}</a>
                     <form action="/get_url/{{page.id}}/" method="post">{% csrf_token %}
                         <div class="text-right p-2">
@@ -13,14 +14,10 @@
                     </form>
             </div>
             <div class="card-body manage">
-              <p>{{ page.rank }}</p>
+              <h4>Rank: {{ page.page_rank }}</h4>
               <p>
                 <a href="" class="btn btn-primary">Page Traffic</a>
                 <span>{{page.page_traffic}}</span>
-              </p>
-              <p>
-                <a href="" class="btn btn-primary">Get Signup Count</a>
-                <span>{{page.page_signups}}</span>
               </p>
               <p>
                 <a href="" class="btn btn-primary">Page Status</a>
