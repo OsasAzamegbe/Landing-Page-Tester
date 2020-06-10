@@ -189,16 +189,16 @@ def add_page(request):
 
 
 def get_status(request):
-            if  request.method == 'GET':
-                return render(request, 'index.html')
-            if request.method == 'POST':
-                url_check = request.POST.get('url')
-            Page = Page.objects.filter(page_url=url_check)
-            status = Page.page_status
-            context= {
-                'status': status
-            }
-            return render(request, 'status.html', context)    
+    if  request.method == 'GET':
+        return render(request, 'index.html')
+    if request.method == 'POST':
+        url_check = request.POST.get('url')
+    Page = Page.objects.filter(page_url=url_check)
+    status = Page.page_status
+    context= {
+        'status': status
+    }
+    return render(request, 'status.html', context)    
 
             
 def delete_page(request,pk):    
