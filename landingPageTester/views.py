@@ -187,6 +187,7 @@ def add_page(request):
             traffic.save()
         return HttpResponseRedirect(reverse('index'))
 
+
 def get_url(request,pk):
     get_url = Page.objects.get(id=pk)
     context = {
