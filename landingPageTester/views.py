@@ -183,7 +183,8 @@ def add_page(request):
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-        return HttpResponseRedirect('index')    
+        return redirect('index')  
+    return redirect('index')  
 
 
 
