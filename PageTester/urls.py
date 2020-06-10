@@ -19,12 +19,10 @@ from landingPageTester import views as LPT_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('', LPT_views.index, name='index'),
-    path('add_page/', LPT_views.webinfo, name='addpage'),
-    path('get_status/', LPT_views.get_status, name='status'),
+    path('', LPT_views.index, name='index'),
+    path('add_page/', LPT_views.add_page, name='add_page'),
+    path('get_status/', LPT_views.get_status, name='get_status'),
     # path('landingpagetester/', LPT_views.TestPage, name='testPage'),
-    path('delete_url/<str:pk>',LPT_views.delete_url, name='delete_url'),
-	#path('manage_url/<str:pk>',LPT_views.manage_url, name='manage_url'),
-	path('manage_page/', LPT_views.manage_page, name='manage_page'),
-	path('edit_url/', LPT_views.edit_url, name='edit_url'),
+    path('delete_page/<str:pk>',LPT_views.delete_page, name='delete_page'),
+    path('get_page_signups/', LPT_views.get_page_signups, name='get_page_signups'),
 ]

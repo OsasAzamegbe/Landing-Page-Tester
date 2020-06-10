@@ -19,6 +19,6 @@ class Page(models.Model):
 
 
     def __str__(self):
-        return '%s %s' % ('Page:', self.page_name)
+        return '%s %s' % ('Page:', self.page_url)
 
 

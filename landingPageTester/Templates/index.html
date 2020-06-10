@@ -58,15 +58,15 @@
         <div class="result-section mt-4 col-md-8 mx-auto">
           <h5 class="text-secondary display-6">Saved Landing Pages</h5>
           <div class="row">
-            {% if traffics %} {% for traffic in traffics %}
+            {% if pages %} {% for page in pages %}
             <div class="col-md-6">
               <div class="result card p-2">
                 <div class="card-header">
-                  <a href="{{ traffic.page_url }}">{{ traffic.page_url }}</a>
+                  <a href="{{ page.page_url }}">{{ page.page_url }}</a>
                 </div>
                 <div class="card-body">
-                  <p>Rank: {{ traffic.page_rank }}
-                  <p>Page Views per Million: {{ traffic.page_traffic }}</p>
+                  <p>Rank: {{ page.page_rank }}
+                  <p>Page Views per Million: {{ page.page_traffic }}</p>
                 </div>
 
                 <div class="btns">
