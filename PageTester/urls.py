@@ -24,4 +24,7 @@ urlpatterns = [
     path('get_status/', LPT_views.get_status, name='status'),
     # path('landingpagetester/', LPT_views.TestPage, name='testPage'),
     path('delete_url/<str:pk>',LPT_views.delete_url, name='delete_url'),
+	#path('manage_url/<str:pk>',LPT_views.manage_url, name='manage_url'),
+	path('manage_page/', LPT_views.manage_page, name='manage_page'),
+	path('edit_url/', LPT_views.edit_url, name='edit_url'),
 ]
