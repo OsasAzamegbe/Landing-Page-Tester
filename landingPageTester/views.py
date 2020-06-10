@@ -8,16 +8,11 @@ from future.standard_library import install_aliases
 install_aliases()
 from urllib.parse import parse_qs, quote_plus
 from django.shortcuts import render, redirect
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
 from django.contrib import messages
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
 from django.urls import reverse
-# from . import credentials
 from datetime import datetime
 import json
 from bs4 import BeautifulSoup
