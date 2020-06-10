@@ -186,7 +186,13 @@ def add_page(request):
         return HttpResponseRedirect(reverse('index'))    
 
 
-
+def get_url(request,pk):
+    get_url = Page.objects.get(id=pk)
+    context = {
+        'url':get_url
+    }
+    return render(request, 'edit.html', context)
+    
 
 def get_status(request):
     if  request.method == 'GET':
@@ -207,55 +213,36 @@ def delete_page(request, pk):
         delete_urls.delete()
     return HttpResponseRedirect(reverse('index'))
     
-def get_page_signups(request):
-	if  request.method == 'GET':
-		return render(request, 'index.html')
-	try:
-		if request.method == 'POST':
-			url_check = request.POST['url']
-	except KeyError:
-		url_check = None
 def edit_url(request):
-	if request.method == 'GET':
-		return render(request, 'edit.html')
-	
-	if request.method == 'POST':
-		url_check = request.POST.get('url')
-		
-		headers = {'Accept': 'application/xml',
-		           'Content-Type': content_type,
-		           'X-Amz-Date': amzdate,
-		           'Authorization': authorization_header,
-		           'x-amz-security-token': session_token,
-		           'x-api-key': apikey}
-		request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
-		r = requests.get(request_url, headers=headers)
-		soup = BeautifulSoup(r.text, 'html.parser')
-		status_code = soup.responsestatus.statuscode.get_text()
-		rank = soup.rank.get_text()
-		result_url = soup.site.get_text()
-		try:
-			result_page_views_permillion = soup.pageviews.permillion.get_text()
-		
-		except:
-			result_page_views_permillion = "0.0"
-		
-		finally:
-			traffic = Page(page_url=result_url, page_traffic=float(result_page_views_permillion),
-			               page_status=int(status_code), page_rank=rank)
-			traffic_exists = Page.objects.filter(page_url=result_url).exists()
-			if traffic_exists:
-				Page.objects.filter(page_url=result_url).delete()
-			traffic.save()
-			all_traffic = Page.objects.all()
-			context = {
-				'traffics': all_traffic
-			}
-			return render(request, 'index.html', context)
-	Page = Page.objects.filter(page_signups=url_check)
-	signups_no = Page.page_signups
-	context = {"signups_no": signups_no}
-	return render(request, "manage.html", context)
+    if request.method == 'GET':
+        return render(request, 'edit.html')
+    
+    if request.method == 'POST':
+        url_check = request.POST.get('url')
+        
+        headers = {'Accept': 'application/xml',
+                   'Content-Type': content_type,
+                   'X-Amz-Date': amzdate,
+                   'Authorization': authorization_header,
+                   'x-amz-security-token': session_token,
+                   'x-api-key': apikey}
+        request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
+        r = requests.get(request_url, headers=headers)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        status_code = soup.responsestatus.statuscode.get_text()
+        rank = soup.rank.get_text()
+        result_url = soup.site.get_text()
+        try:
+            result_page_views_permillion = soup.pageviews.permillion.get_text()
+        
+        except:
+            result_page_views_permillion = "0.0"
+        
+        finally:
+            traffic = Page.objects.filter(page_url=url_check).update(page_url=result_url, page_traffic=float(result_page_views_permillion),
+                           page_status=int(status_code), page_rank=rank)
+            return HttpResponseRedirect(reverse('index'))
+    # return render(request, "manage.html", context)
 
 
 def index(request):
