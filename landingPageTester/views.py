@@ -22,7 +22,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import *
+from .models import Traffic, Page
 
 # Create your views here.
 
@@ -173,10 +173,10 @@ def add_page(request):
         result_url = soup.site.get_text()
         try:
             result_page_views_permillion = soup.pageviews.permillion.get_text()
-            
+ 
         except:
             result_page_views_permillion = "0.0"
-            
+
         finally:
             traffic = Page(page_url=result_url, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
             traffic_exists = Page.objects.filter(page_url=result_url).exists()
@@ -184,6 +184,9 @@ def add_page(request):
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
         return HttpResponseRedirect('index')    
+
+
+
 
 def get_status(request):
             if  request.method == 'GET':
@@ -202,8 +205,21 @@ def delete_page(request,pk):
     if request.method == 'POST':
         delete_urls= Page.objects.get(id=pk)
         delete_urls.delete()
-        
     return HttpResponseRedirect('index')
+    
+def get_page_signups(request):
+	if  request.method == 'GET':
+		return render(request, 'index.html')
+	try:
+		if request.method == 'POST':
+			url_check = request.POST['url']
+	except KeyError:
+		url_check = None
+
+	Page = Page.objects.filter(page_signups=url_check)
+	signups_no = Page.page_signups
+	context = {"signups_no": signups_no}
+	return render(request, "manage.html", context)
 
 
 def index(request):
