@@ -41,20 +41,12 @@
                 </div>
 
                 <div class="btns">
-                  <!-- <a
-                    action="/manage/{{ page.page_url }}"
-                    class="btn btn-primary manage-btn"
-                    type="submit"
-                    >
-                        {% csrf_token %}
-                        Manage Page
-                    </a> -->
-                    <form action="/manage/{{page.id}}/" method="post">{% csrf_token %}
+                      <form action="/manage/{{page.id}}/" method="post">{% csrf_token %}
                         <div class="text-right p-2">
                             <button type="submit" class="btn btn-primary manage-btn">Manage Page</button>
                         </div>
                     </form>
-                  <a href="/delete_page/{{ page.page_url }}" onclick="return confirm('Are you sure you want to delete this page?')" class="btn btn-danger">Delete</a>
+                  <a href="/delete_page/{{page.id}}/" onclick="return confirm('Are you sure you want to delete this page?')" class="btn btn-danger">Delete</a>
                 </div>
               </div>
             </div>
