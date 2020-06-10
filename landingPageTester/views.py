@@ -183,7 +183,7 @@ def webinfo(request):
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-            all_traffic = Traffic.objects.all()
+            all_traffic = Page.objects.all()
             context = {            
                 'traffics': all_traffic
             }
@@ -205,7 +205,7 @@ def get_status(request):
     context= {
         'status': status
      }
-    return render(request, 'status.html', context)       
+    return render(request, 'manage.html', context)       
             
 def delete_url(request):
     delete_urls= Traffic.objects.get(page_url=url)
@@ -213,7 +213,6 @@ def delete_url(request):
     if request.method == 'POST':
         delete_urls.delete()
         return redirect('index')
-
     context = {'delete_urls':delete_urls}
     return render(request,'delete_form.html',context)
     
@@ -229,7 +228,6 @@ def get_page_signups(request):
 	Page = Page.objects.filter(page_signups=url_check)
 	signups_no = Page.page_signups
 	context = {"signups_no": signups_no}
-
 	return render(request, "manage.html", context)
 
 

@@ -20,7 +20,7 @@ from landingPageTester import views as LPT_views
 urlpatterns = [
 	path('admin/', admin.site.urls),
 	# path('', LPT_views.index, name='index'),
-	path('test/', LPT_views.webinfo, name='topsites'),
+	# path('test/', LPT_views.webinfo, name='topsites'),
 	# path('landingpagetester/', LPT_views.TestPage, name='testPage')
 	path('add_page/', LPT_views.webinfo, name='addpage'),
 	path('get_status/', LPT_views.get_status, name='status'),
