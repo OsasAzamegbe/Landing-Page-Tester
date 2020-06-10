@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+      {% load static %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Landing Page Tester</title>
@@ -28,7 +29,7 @@
                 <div class="card-header">
                   <a href="https://www.google.com">https://www.google.com</a>
                   <a
-                    href="edit.html?id=1"
+                    href="{% url 'edit_url' %}"
                     class="float-right btn btn-sm btn-info px-3"
                     >Edit</a
                   >
@@ -46,7 +47,7 @@
                 </div>
 
                 <div class="btns">
-                  <a href="./index.html" class="btn btn-primary manage-btn"
+                  <a href="{% url 'addpage' %}" class="btn btn-primary manage-btn"
                     ><< Back</a
                   >
                   <a href="" class="btn btn-danger">Delete</a>
