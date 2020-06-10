@@ -5,26 +5,31 @@
         </p>
         <div class="form-section col-md-8 mx-auto">
           <div class="card">
-            <form action="" method="POST">
+              <form action="{% url 'edit_url' %}" method="POST">
+                {% csrf_token %}
               <div class="form-group">
                 <input
                   type="url"
                   class="form-control"
-                  placeholder="http(s)://www.google.com"
+                  placeholder="Enter URL here"
                   name="url"
-                  value="https://www.google.com"
-                  required
-                />
+                  value="{{ url.page_url }}" 
+                  required/>
               </div>
               <div class="form-group">
-                <a href="./index.html" class="btn btn-primary manage-btn"
-                  ><< Back</a
-                >
-                <button type="submit" class="btn btn-secondary float-right">
+<button type="submit" class="btn btn-secondary float-right">
                   Update
                 </button>
               </div>
             </form>
+            <form action="/manage/{{url.id}}/" method="post">{% csrf_token %}
+                        <div class="text-right p-2">
+                            <button type="submit" class="btn btn-primary manage-btn float-left"><< Back</button>
+                        </div>
+                    </form>
+          
           </div>
         </div>
+      </div>
+    </div>
   {% endblock %}
