@@ -239,7 +239,8 @@ def edit_url(request):
             result_page_views_permillion = "0.0"
         
         finally:
-            traffic = Page.objects.filter(page_url=url_check).update(page_url=result_url, page_traffic=float(result_page_views_permillion),
+            page_domain = tldextract.extract(result_url).domain
+            traffic = Page.objects.filter(page_url=url_check).update(page_url=result_url, page_name=page_domain,page_traffic=float(result_page_views_permillion),
                            page_status=int(status_code), page_rank=rank)
             return HttpResponseRedirect(reverse('index'))
 def index(request):
