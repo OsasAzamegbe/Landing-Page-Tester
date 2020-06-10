@@ -5,6 +5,6 @@ from .apiviews import *
 app_name = 'landingPageTester'
 
 urlpatterns = [
-    path('page/(?P<url>.+)/$', PageList.as_view(), name='list'),
+    path('page/<str:url>', PageList.as_view(), name='list'),
     path('pages/', AllPagesList.as_view(), name='all')
 ]
