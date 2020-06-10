@@ -235,7 +235,7 @@ def manage(request, pk):
     context = {            
         'page': page
     }
-    return render(request, 'manage.html')
+    return render(request, 'manage.html', context)
   
   
 # @api_view(["POST"])
