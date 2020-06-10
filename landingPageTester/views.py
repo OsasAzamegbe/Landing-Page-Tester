@@ -262,6 +262,37 @@ def manage(request, pk):
     return render(request, 'manage.html', context)
   
   
+def api_add(url):
+    url_check = url
+
+    headers = {'Accept':'application/xml',
+            'Content-Type': content_type,
+            'X-Amz-Date':amzdate,
+            'Authorization': authorization_header,
+            'x-amz-security-token': session_token,
+            'x-api-key': apikey}
+    request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
+    r = requests.get(request_url, headers=headers)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    
+    try:
+        status_code = soup.responsestatus.statuscode.get_text()
+        rank = soup.rank.get_text()
+        result_url = soup.site.get_text()
+        result_page_views_permillion = soup.pageviews.permillion.get_text()
+
+    except:
+        result_page_views_permillion = "0.0"
+
+    finally:
+        page_domain = tldextract.extract(result_url).domain
+        traffic = Page(page_url=result_url, page_name=page_domain, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+        traffic_exists = Page.objects.filter(page_url=result_url).exists()
+        if traffic_exists:
+            Page.objects.filter(page_url=result_url).delete()
+        traffic.save()
+
+
 # @api_view(["POST"])
 # def TestPage(url):
 #     try:

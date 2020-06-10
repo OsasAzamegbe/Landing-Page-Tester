@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from .models import Page
 from .serializers import landingPageSerializer
-from .views import add_page
+from .views import add_page, api_add
 
 
 class PageList(generics.ListAPIView):
@@ -17,7 +17,15 @@ class PageList(generics.ListAPIView):
     def get_queryset(self):
         queryset = Page.objects.all()
         url=self.kwargs['url']
-        return queryset.filter(page_url=url)
+        page = queryset.filter(page_url=url)
+        if page:
+            return page
+        else:
+            api_add(url)
+            return queryset.filter(page_url=url)
+    
+
+    
        
 class AllPagesList(generics.ListAPIView):
     queryset = Page.objects.all()
