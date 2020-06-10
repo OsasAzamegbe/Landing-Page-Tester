@@ -23,6 +23,7 @@ import json
 from bs4 import BeautifulSoup
 import requests
 from .models import Traffic, Page
+import tldextract
 
 # Create your views here.
 
@@ -178,13 +179,13 @@ def add_page(request):
             result_page_views_permillion = "0.0"
 
         finally:
-            traffic = Page(page_url=result_url, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+            page_domain = tldextract.extract(result_url).domain
+            traffic = Page(page_url=result_url, page_name=page_domain, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
             traffic_exists = Page.objects.filter(page_url=result_url).exists()
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-        return HttpResponseRedirect(reverse('index'))    
-
+        return HttpResponseRedirect(reverse('index'))
 
 def get_url(request,pk):
     get_url = Page.objects.get(id=pk)
@@ -192,8 +193,6 @@ def get_url(request,pk):
         'url':get_url
     }
     return render(request, 'edit.html', context)
-    
-
 def get_status(request):
     if  request.method == 'GET':
         return render(request, 'index.html')
@@ -242,9 +241,6 @@ def edit_url(request):
             traffic = Page.objects.filter(page_url=url_check).update(page_url=result_url, page_traffic=float(result_page_views_permillion),
                            page_status=int(status_code), page_rank=rank)
             return HttpResponseRedirect(reverse('index'))
-    # return render(request, "manage.html", context)
-
-
 def index(request):
     all_pages = Page.objects.all()
     context = {            
