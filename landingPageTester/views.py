@@ -219,9 +219,13 @@ def get_page_signups(request):
    
 
 def manage_page(request):
-	#manage_urls = Page.objects.get(id=pk)
-	if request.method == 'GET':
-		return render(request, 'manage.html')
+    if request.method == 'GET':
+	    pk = request.POST.get('page.page_url')
+    # if request.method == 'POST':
+    #     pk = request.POST.get('page.pk')
+    manage_urls = Page.objects.get(page_url=pk)
+	# if request.method == 'GET':
+    return render(request, 'manage.html')
 	
 	
 def edit_url(request):

@@ -72,7 +72,7 @@
                 <div class="btns">
                   <a
                     href="{% url 'manage_page' %}"
-                    class="btn btn-primary manage-btn"
+                    class="btn btn-primary manage-btn" name="{{ page.page_url }}"
                     >Manage Page</a
                   >
                   <a href="" onclick="return confirm('Are you sure you want to delete this page?')" class="btn btn-danger">Delete</a>
