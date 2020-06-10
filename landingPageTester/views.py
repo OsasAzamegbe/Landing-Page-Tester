@@ -3,7 +3,6 @@ import logging, getopt
 import boto3
 import getpass
 import time
-
 from configparser import ConfigParser
 from future.standard_library import install_aliases
 install_aliases()
@@ -17,6 +16,7 @@ from django.contrib import messages
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
+from django.urls import reverse
 # from . import credentials
 from datetime import datetime
 import json
@@ -183,30 +183,29 @@ def add_page(request):
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-        return redirect('index')  
-    return redirect('index')  
+        return HttpResponseRedirect(reverse('index'))    
 
 
 
 
 def get_status(request):
-            if  request.method == 'GET':
-                return render(request, 'index.html')
-            if request.method == 'POST':
-                url_check = request.POST.get('url')
-            Page = Page.objects.filter(page_url=url_check)
-            status = Page.page_status
-            context= {
-                'status': status
-            }
-            return render(request, 'status.html', context)    
+    if  request.method == 'GET':
+        return render(request, 'index.html')
+    if request.method == 'POST':
+        url_check = request.POST.get('url')
+    Page = Page.objects.filter(page_url=url_check)
+    status = Page.page_status
+    context= {
+        'status': status
+    }
+    return render(request, 'status.html', context)    
 
             
-def delete_page(request,pk):    
+def delete_page(request, pk):    
     if request.method == 'POST':
         delete_urls= Page.objects.get(id=pk)
         delete_urls.delete()
-    return HttpResponseRedirect('index')
+    return HttpResponseRedirect(reverse('index'))
     
 def get_page_signups(request):
 	if  request.method == 'GET':
@@ -216,18 +215,6 @@ def get_page_signups(request):
 			url_check = request.POST['url']
 	except KeyError:
 		url_check = None
-   
-
-def manage_page(request):
-    if request.method == 'GET':
-	    pk = request.POST.get('page.page_url')
-    # if request.method == 'POST':
-    #     pk = request.POST.get('page.pk')
-    manage_urls = Page.objects.get(page_url=pk)
-	# if request.method == 'GET':
-    return render(request, 'manage.html')
-	
-	
 def edit_url(request):
 	if request.method == 'GET':
 		return render(request, 'edit.html')
@@ -265,9 +252,6 @@ def edit_url(request):
 				'traffics': all_traffic
 			}
 			return render(request, 'index.html', context)
-	
-	
-
 	Page = Page.objects.filter(page_signups=url_check)
 	signups_no = Page.page_signups
 	context = {"signups_no": signups_no}
@@ -280,6 +264,14 @@ def index(request):
         'pages': all_pages
     }
     return render(request, 'index.html', context)
+
+
+def manage(request, pk):
+    page = Page.objects.get(id=pk)
+    context = {            
+        'page': page
+    }
+    return render(request, 'manage.html', context)
   
   
 # @api_view(["POST"])
