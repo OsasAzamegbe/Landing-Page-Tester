@@ -153,12 +153,12 @@ authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + cred
 apikey = "Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO"
 
 
-def webinfo(request):
-    if  request.method == 'GET':
-        return render(request, 'index.html')
+def add_page(request):
+    # if  request.method == 'GET':
+    #     return render(request, 'index.html')
     if request.method == 'POST':
         url_check = request.POST.get('url')
-        # try:
+
         headers = {'Accept':'application/xml',
                 'Content-Type': content_type,
                 'X-Amz-Date':amzdate,
@@ -183,14 +183,7 @@ def webinfo(request):
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-            all_traffic = Page.objects.all()
-            context = {            
-                'traffics': all_traffic
-            }
-            return render(request, 'index.html', context)
-        # except:
-        #     messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
-        #     return HttpResponseRedirect('/test/')
+        return HttpResponseRedirect('index')    
 
 def get_status(request):
             if  request.method == 'GET':
@@ -202,26 +195,25 @@ def get_status(request):
             context= {
                 'status': status
             }
-            return render(request, 'status.html', context)       
+            return render(request, 'status.html', context)    
+
             
-def delete_url(request,pk):
-    delete_urls= Page.objects.get(id=pk)
+def delete_page(request,pk):    
     if request.method == 'POST':
+        delete_urls= Page.objects.get(id=pk)
         delete_urls.delete()
-        return redirect('index')
-
-    context = {'delete_urls':delete_urls}
-
-    return render(request,'delete_form.html',context)
-    
+        
+    return HttpResponseRedirect('index')
 
 
-
-
-
-# def index(requests):
-#     return render(requests, 'index.html')
-
+def index(request):
+    all_pages = Page.objects.all()
+    context = {            
+        'pages': all_pages
+    }
+    return render(request, 'index.html', context)
+  
+  
 # @api_view(["POST"])
 # def TestPage(url):
 #     try:
