@@ -3,7 +3,6 @@ import logging, getopt
 import boto3
 import getpass
 import time
-
 from configparser import ConfigParser
 from future.standard_library import install_aliases
 install_aliases()
@@ -17,12 +16,13 @@ from django.contrib import messages
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
+from django.urls import reverse
 # from . import credentials
 from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import Traffic
+from .models import Traffic, Page
 
 # Create your views here.
 
@@ -153,12 +153,12 @@ authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + cred
 apikey = "Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO"
 
 
-def webinfo(request):
-    if  request.method == 'GET':
-        return render(request, 'index.html')
+def add_page(request):
+    # if  request.method == 'GET':
+    #     return render(request, 'index.html')
     if request.method == 'POST':
         url_check = request.POST.get('url')
-        # try:
+
         headers = {'Accept':'application/xml',
                 'Content-Type': content_type,
                 'X-Amz-Date':amzdate,
@@ -168,47 +168,76 @@ def webinfo(request):
         request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
         r = requests.get(request_url, headers=headers)
         soup = BeautifulSoup(r.text, 'html.parser')
+        status_code = soup.responsestatus.statuscode.get_text()
+        rank = soup.rank.get_text()
         result_url = soup.site.get_text()
         try:
             result_page_views_permillion = soup.pageviews.permillion.get_text()
-            
+ 
         except:
             result_page_views_permillion = "0.0"
-            
+
         finally:
-            traffic = Traffic(page_url=result_url, stats=float(result_page_views_permillion))
-            traffic_exists = Traffic.objects.filter(page_url=result_url).exists()
+            traffic = Page(page_url=result_url, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+            traffic_exists = Page.objects.filter(page_url=result_url).exists()
             if traffic_exists:
-                Traffic.objects.filter(page_url=result_url).delete()
+                Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-            all_traffic = Traffic.objects.all()
-            context = {            
-                'traffics': all_traffic
-            }
-            return render(request, 'index.html', context)
-        # except:
-        #     messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
-        #     return HttpResponseRedirect('/test/')
+        return HttpResponseRedirect(reverse('index'))    
 
-def delete_url(request):
-    delete_urls= Traffic.objects.get(page_url=url)
-    #delete_urls= Traffic.objects.get(page_url=url)
+
+
+
+def get_status(request):
+    if  request.method == 'GET':
+        return render(request, 'index.html')
     if request.method == 'POST':
+        url_check = request.POST.get('url')
+    Page = Page.objects.filter(page_url=url_check)
+    status = Page.page_status
+    context= {
+        'status': status
+    }
+    return render(request, 'status.html', context)    
+
+            
+def delete_page(request, pk):    
+    if request.method == 'POST':
+        delete_urls= Page.objects.get(id=pk)
         delete_urls.delete()
-        return redirect('index')
-
-    context = {'delete_urls':delete_urls}
-
-    return render(request,'delete_form.html',context)
+    return HttpResponseRedirect(reverse('index'))
     
+def get_page_signups(request):
+	if  request.method == 'GET':
+		return render(request, 'index.html')
+	try:
+		if request.method == 'POST':
+			url_check = request.POST['url']
+	except KeyError:
+		url_check = None
+
+	Page = Page.objects.filter(page_signups=url_check)
+	signups_no = Page.page_signups
+	context = {"signups_no": signups_no}
+	return render(request, "manage.html", context)
 
 
+def index(request):
+    all_pages = Page.objects.all()
+    context = {            
+        'pages': all_pages
+    }
+    return render(request, 'index.html', context)
 
 
-
-# def index(requests):
-#     return render(requests, 'index.html')
-
+def manage(request, pk):
+    page = Page.objects.get(id=pk)
+    context = {            
+        'page': page
+    }
+    return render(request, 'manage.html', context)
+  
+  
 # @api_view(["POST"])
 # def TestPage(url):
 #     try:
