@@ -14,7 +14,6 @@ class Page(models.Model):
     page_name = models.CharField(max_length=100)    
     page_traffic = models.FloatField(default=0)
     page_status = models.IntegerField(default=0)
-    page_signups = models.FloatField(default=0)
     page_rank = models.BigIntegerField(default=0000)
 
 

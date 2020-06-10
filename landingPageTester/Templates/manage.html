@@ -5,23 +5,23 @@
         <div class="col-md-8 mx-auto">
           <div class="result card p-2">
             <div class="card-header">
+             <h4>{{ page.page_name }}</h4>
               <a href="{{page.page_url}}">{{ page.page_url }}</a>
-              <a
-                href="edit.html?id=1"
-                class="float-right btn btn-sm btn-info px-3"
-                >Edit</a
-              >
+                    <form action="/get_url/{{page.id}}/" method="post">{% csrf_token %}
+                        <div class="text-right p-2">
+                            <button type="submit" class="float-right btn btn-sm btn-info px-3">Edit</button>
+                        </div>
+                    </form>
             </div>
             <div class="card-body manage">
-          
-              <p>{{ page.rank }}</p>
+              <h4>Rank: {{ page.page_rank }}</h4>
               <p>
-                <a href="/get_status/{{page.id}}/" method='POST' class="btn btn-primary">{% csrf_token %}Get Status</a>
+                <a href="" class="btn btn-primary">Page Traffic</a>
                 <span>{{page.page_traffic}}</span>
               </p>
               <p>
-                <a href="" class="btn btn-primary">Get Signup Count</a>
-                <span>{{page.page_signups}}</span>
+                <a href="" class="btn btn-primary">Page Status</a>
+                <span>{{page.page_status}}</span>
               </p>
             </div>
 
