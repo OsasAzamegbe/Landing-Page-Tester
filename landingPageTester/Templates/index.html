@@ -1,41 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    {% load static %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Landing Page Tester</title>
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Pacifico&family=Rubik:wght@300;400&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
-  </head>
-  <body>
-    <div class="main light">
-      <div class="container">
-        <h3 class="text-center display-4">
-          Team Storm
-        </h3>
-        {% comment %} {% if messages %} {% for message in messages %} {% if message.tags ==
-        "error" or message.tags == "debug" %}
-        <div class="alert alert-danger" align="center">{{ message }}</div>
-        {% comment %} {% else %} {% endcomment %}
-        {% comment %} <div class="alert alert-{{message.tags}}" align="center">
-          {{ message }} {% endcomment %} 
-        </div>
-        {% comment %} {% endif %} {% endfor %} {% endif %} {% endcomment %}
+{% extends 'base.html' %}
+    {% block content %}
         <p class="text-center text mb-3">
           Please enter a valid url to analyze
         </p>
 
         <div class="form-section col-md-8 mx-auto">
           <div class="card">
-            <form action="{% url 'addpage' %}" method="POST">
+            <form action="{% url 'add_page' %}" method="POST">
               {% csrf_token %}
               <div class="form-group">
                 <input
@@ -70,12 +41,20 @@
                 </div>
 
                 <div class="btns">
-                  <a
-                    href="./manage.html"
+                  <!-- <a
+                    action="/manage/{{ page.page_url }}"
                     class="btn btn-primary manage-btn"
-                    >Manage Page</a
-                  >
-                  <a href="" onclick="return confirm('Are you sure you want to delete this page?')" class="btn btn-danger">Delete</a>
+                    type="submit"
+                    >
+                        {% csrf_token %}
+                        Manage Page
+                    </a> -->
+                    <form action="/manage/{{page.id}}/" method="post">{% csrf_token %}
+                        <div class="text-right p-2">
+                            <button type="submit" class="btn btn-primary manage-btn">Manage Page</button>
+                        </div>
+                    </form>
+                  <a href="/delete_page/{{ page.page_url }}" onclick="return confirm('Are you sure you want to delete this page?')" class="btn btn-danger">Delete</a>
                 </div>
               </div>
             </div>
@@ -83,65 +62,4 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="footer-section">
-      <div class="row">
-        <div class="col">
-          <a href="#" class="switch">
-            <svg
-              height="512"
-              viewBox="0 0 128 128"
-              width="512"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <g>
-                <circle cx="64" cy="63.997" r="39.247" />
-                <g fill="#fea832">
-                  <path
-                    d="m95.247 65.747a1.749 1.749 0 0 1 -1.747-1.747 29.53 29.53 0 0 0 -29.5-29.5 1.75 1.75 0 0 1 0-3.5 33.035 33.035 0 0 1 33 33 1.749 1.749 0 0 1 -1.753 1.747z"
-                  />
-                  <g>
-                    <path
-                      d="m64 16.75a47.252 47.252 0 0 1 8.5.781c.038-.545.063-1.1.063-1.658-.001-7.801-8.563-14.126-8.563-14.126s-8.563 6.325-8.563 14.126c0 .562.026 1.113.064 1.658a47.243 47.243 0 0 1 8.499-.781z"
-                    />
-                    <path
-                      d="m64 111.244a47.343 47.343 0 0 0 8.5-.78c.038.544.063 1.095.063 1.657 0 7.8-8.562 14.126-8.562 14.126s-8.563-6.324-8.563-14.126c0-.562.026-1.113.064-1.657a47.335 47.335 0 0 0 8.498.78z"
-                    />
-                    <path
-                      d="m97.409 30.588a47.349 47.349 0 0 1 5.457 6.562c.413-.358.82-.73 1.217-1.127 5.517-5.517 3.934-16.043 3.934-16.043s-10.526-1.58-16.043 3.934c-.4.4-.769.8-1.127 1.217a47.349 47.349 0 0 1 6.562 5.457z"
-                    />
-                    <path
-                      d="m30.591 97.406a47.232 47.232 0 0 0 6.562 5.457c-.358.413-.73.82-1.127 1.217-5.517 5.517-16.043 3.934-16.043 3.934s-1.583-10.526 3.934-16.043c.4-.4.8-.769 1.217-1.127a47.291 47.291 0 0 0 5.457 6.562z"
-                    />
-                    <path
-                      d="m111.247 64a47.335 47.335 0 0 1 -.78 8.5c.544.038 1.095.064 1.657.064 7.8 0 14.126-8.563 14.126-8.563s-6.325-8.562-14.126-8.562c-.562 0-1.113.025-1.657.063a47.343 47.343 0 0 1 .78 8.498z"
-                    />
-                    <path
-                      d="m16.753 64a47.335 47.335 0 0 0 .78 8.5c-.544.038-1.1.064-1.657.064-7.801-.004-14.126-8.564-14.126-8.564s6.325-8.562 14.126-8.562c.562 0 1.113.025 1.657.063a47.343 47.343 0 0 0 -.78 8.499z"
-                    />
-                    <path
-                      d="m97.409 97.406a47.349 47.349 0 0 1 -6.562 5.457c.358.413.73.82 1.127 1.217 5.517 5.517 16.043 3.934 16.043 3.934s1.583-10.526-3.934-16.043c-.4-.4-.8-.769-1.217-1.127a47.291 47.291 0 0 1 -5.457 6.562z"
-                    />
-                    <path
-                      d="m30.591 30.588a47.349 47.349 0 0 0 -5.457 6.562c-.413-.358-.82-.73-1.217-1.127-5.517-5.517-3.934-16.043-3.934-16.043s10.526-1.58 16.043 3.934c.4.4.769.8 1.127 1.217a47.291 47.291 0 0 0 -6.562 5.457z"
-                    />
-                  </g>
-                </g>
-              </g>
-            </svg>
-          </a>
-        </div>
-        <div class="col"></div>
-      </div>
-    </div>
-
-    
-    <footer>
-      <p>Copyright &copy; Team Storm HNGi7 2020</p>
-    </footer>
-
-    <script src="{% static 'js/script.js' %}"></script>
-  </body>
-</html>
+    {% endblock %}  

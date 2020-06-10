@@ -3,7 +3,6 @@ import logging, getopt
 import boto3
 import getpass
 import time
-
 from configparser import ConfigParser
 from future.standard_library import install_aliases
 install_aliases()
@@ -17,6 +16,7 @@ from django.contrib import messages
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
+from django.urls import reverse
 # from . import credentials
 from datetime import datetime
 import json
@@ -183,7 +183,7 @@ def add_page(request):
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
             traffic.save()
-        return HttpResponseRedirect('index')    
+        return HttpResponseRedirect(reverse('index'))    
 
 
 
@@ -201,11 +201,11 @@ def get_status(request):
     return render(request, 'status.html', context)    
 
             
-def delete_page(request,pk):    
+def delete_page(request, pk):    
     if request.method == 'POST':
         delete_urls= Page.objects.get(id=pk)
         delete_urls.delete()
-    return HttpResponseRedirect('index')
+    return HttpResponseRedirect(reverse('index'))
     
 def get_page_signups(request):
 	if  request.method == 'GET':
@@ -228,6 +228,14 @@ def index(request):
         'pages': all_pages
     }
     return render(request, 'index.html', context)
+
+
+def manage(request, pk):
+    page = Page.objects.get(id=pk)
+    context = {            
+        'page': page
+    }
+    return render(request, 'manage.html')
   
   
 # @api_view(["POST"])
