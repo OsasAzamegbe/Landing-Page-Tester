@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+      {% load static %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Landing Page Tester</title>
@@ -25,19 +26,20 @@
         </p>
         <div class="form-section col-md-8 mx-auto">
           <div class="card">
-            <form action="" method="POST">
+            <form action="{% url 'edit_url' %}" method="POST">
+                {% csrf_token %}
               <div class="form-group">
                 <input
                   type="url"
                   class="form-control"
-                  placeholder="http(s)://www.google.com"
+                  placeholder="Enter URL here"
                   name="url"
                   value="https://www.google.com"
                   required
                 />
               </div>
               <div class="form-group">
-                <a href="./index.html" class="btn btn-primary manage-btn"
+                <a href="{% url 'addpage' %}" class="btn btn-primary manage-btn"
                   ><< Back</a
                 >
                 <button type="submit" class="btn btn-secondary float-right">
