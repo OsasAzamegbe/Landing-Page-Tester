@@ -8,7 +8,7 @@ from configparser import ConfigParser
 from future.standard_library import install_aliases
 install_aliases()
 from urllib.parse import parse_qs, quote_plus
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -22,7 +22,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import Traffic
+from .models import *
 
 # Create your views here.
 
@@ -154,6 +154,7 @@ apikey = "Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO"
 
 
 def webinfo(request):
+<<<<<<< HEAD
 	if  request.method == 'GET':
 		return render(request, 'index.html')
 	if request.method == 'POST':
@@ -190,6 +191,28 @@ def webinfo(request):
 		#     messages.error(request, f'Checking the url at {url_check} raised an error. Please check the URL and try again!')
 		#     return HttpResponseRedirect('/test/')
 
+def get_status(request):
+			if  request.method == 'GET':
+				return render(request, 'index.html')
+			if request.method == 'POST':
+				url_check = request.POST.get('url')
+			Page = Page.objects.filter(page_url=url_check)
+			status = Page.page_status
+			context= {
+				'status': status
+			}
+			return render(request, 'status.html', context)       
+			
+def delete_url(request,pk):
+	delete_urls= Page.objects.get(id=pk)
+	if request.method == 'POST':
+		delete_urls.delete()
+		return redirect('index')
+
+	context = {'delete_urls':delete_urls}
+
+	return render(request,'delete_form.html',context)
+
 def get_page_signups(request):
 	if  request.method == 'GET':
 		return render(request, 'index.html')
@@ -204,7 +227,7 @@ def get_page_signups(request):
 	context = {"signups_no": signups_no}
 
 	return render(request, "manage.html", context)
-
+	
 
 
 
