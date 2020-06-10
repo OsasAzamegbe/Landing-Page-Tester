@@ -8,16 +8,11 @@ from future.standard_library import install_aliases
 install_aliases()
 from urllib.parse import parse_qs, quote_plus
 from django.shortcuts import render, redirect
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
 from django.contrib import messages
 from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
 from django.urls import reverse
-# from . import credentials
 from datetime import datetime
 import json
 from bs4 import BeautifulSoup
@@ -240,8 +235,11 @@ def edit_url(request):
         
         finally:
             page_domain = tldextract.extract(result_url).domain
+
             traffic = Page.objects.filter(page_url=url_check).update(page_url=result_url, page_name=page_domain,page_traffic=float(result_page_views_permillion),
                            page_status=int(status_code), page_rank=rank)
+            # Page.objects.get()
+            # traffic.save()
             return HttpResponseRedirect(reverse('index'))
 def index(request):
     all_pages = Page.objects.all()
@@ -259,6 +257,37 @@ def manage(request, pk):
     return render(request, 'manage.html', context)
   
   
+def api_add(url):
+    url_check = url
+
+    headers = {'Accept':'application/xml',
+            'Content-Type': content_type,
+            'X-Amz-Date':amzdate,
+            'Authorization': authorization_header,
+            'x-amz-security-token': session_token,
+            'x-api-key': apikey}
+    request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
+    r = requests.get(request_url, headers=headers)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    
+    try:
+        status_code = soup.responsestatus.statuscode.get_text()
+        rank = soup.rank.get_text()
+        result_url = soup.site.get_text()
+        result_page_views_permillion = soup.pageviews.permillion.get_text()
+
+    except:
+        result_page_views_permillion = "0.0"
+
+    finally:
+        page_domain = tldextract.extract(result_url).domain
+        traffic = Page(page_url=result_url, page_name=page_domain, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+        traffic_exists = Page.objects.filter(page_url=result_url).exists()
+        if traffic_exists:
+            Page.objects.filter(page_url=result_url).delete()
+        traffic.save()
+
+
 # @api_view(["POST"])
 # def TestPage(url):
 #     try:
