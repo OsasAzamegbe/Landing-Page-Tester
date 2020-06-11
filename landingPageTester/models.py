@@ -34,3 +34,6 @@ class LinkCount(models.Model):
     page_url = models.URLField(max_length=300)
     page_name = models.CharField(max_length=100)
     links_in_count = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.page_name
