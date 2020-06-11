@@ -19,6 +19,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from landingPageTester import views as LPT_views
+from rest_framework.authtoken import views
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -44,5 +45,6 @@ urlpatterns = [
     path('manage/<int:pk>/', LPT_views.manage, name='manage'),
 	path('edit_url/', LPT_views.edit_url, name='edit_url'),
 	path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
-    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
+    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
 ]
