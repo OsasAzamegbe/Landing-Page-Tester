@@ -19,6 +19,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from landingPageTester import views as LPT_views
+from django.urls import path, re_path
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -35,14 +36,16 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-	path('api/', include('landingPageTester.urls')),
-    path('', LPT_views.index, name='index'),
-    path('add_page/', LPT_views.add_page, name='add_page'),
-    path('get_status/', LPT_views.get_status, name='get_status'),
+	path('v1/', include('landingPageTester.urls')),
+    # path('', LPT_views.index, name='index'),
+    # path('add_page/', LPT_views.add_page, name='add_page'),
+    # path('get_status/', LPT_views.get_status, name='get_status'),
     # path('landingpagetester/', LPT_views.TestPage, name='testPage'),
-    path('delete_page/<int:pk>/', LPT_views.delete_page, name='delete_page'),
-    path('manage/<int:pk>/', LPT_views.manage, name='manage'),
-	path('edit_url/', LPT_views.edit_url, name='edit_url'),
-	path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
-    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
+    # path('delete_page/<int:pk>/', LPT_views.delete_page, name='delete_page'),
+    # path('manage/<int:pk>/', LPT_views.manage, name='manage'),
+	# path('edit_url/', LPT_views.edit_url, name='edit_url'),
+	# path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),    
+    re_path(r'^v1/documentation(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+  
 ]

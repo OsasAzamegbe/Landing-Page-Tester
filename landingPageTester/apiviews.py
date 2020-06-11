@@ -2,7 +2,8 @@ from rest_framework import  status,generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse
 from django_filters import rest_framework as filters
 from .models import *
 from .serializers import *
@@ -10,6 +11,7 @@ from .views import  api_add, api_link, api_speed
 
 
 class TrafficHistory(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = TrafficSerializer
     queryset = Page.objects.all()
     # filter_backends = [filters.DjangoFilterBackend]
@@ -26,6 +28,7 @@ class TrafficHistory(generics.ListAPIView):
             return queryset.filter(page_url=url)
     
 class SpeedApi(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = SpeedSerializer
     queryset = Speed.objects.all()
 
@@ -40,6 +43,7 @@ class SpeedApi(generics.ListAPIView):
             return queryset.filter(page_url=url_)
 
 class LinkCountApi(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = CountSerializer
     queryset = LinkCount.objects.all()
 
@@ -56,11 +60,9 @@ class LinkCountApi(generics.ListAPIView):
     
        
 class AllTrafficList(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Page.objects.all()
     serializer_class = TrafficSerializer
 
-# class Alexa(APIView):
-
-#     def alexa(request, url):
-#         add_page()
-
+def doc_json(request):
+    return HttpResponseRedirect('/v1/documentation.json')
