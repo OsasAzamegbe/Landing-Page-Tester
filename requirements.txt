@@ -10,6 +10,7 @@ Django==3.0.7
 django-filter==2.3.0
 djangorestframework==3.11.0
 docutils==0.15.2
+drf-yasg==1.17.1
 future==0.18.2
 idna==2.9
 jmespath==0.10.0

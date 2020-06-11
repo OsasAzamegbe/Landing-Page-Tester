@@ -44,5 +44,5 @@ urlpatterns = [
     path('manage/<int:pk>/', LPT_views.manage, name='manage'),
 	path('edit_url/', LPT_views.edit_url, name='edit_url'),
 	path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
-    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
+    path('api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')
 ]
