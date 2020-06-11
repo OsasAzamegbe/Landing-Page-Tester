@@ -45,7 +45,7 @@ urlpatterns = [
     # path('manage/<int:pk>/', LPT_views.manage, name='manage'),
 	# path('edit_url/', LPT_views.edit_url, name='edit_url'),
 	# path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),    
     re_path(r'^v1/documentation(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
   
 ]
