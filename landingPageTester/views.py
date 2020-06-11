@@ -17,7 +17,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import Traffic, Page
+from .models import *
 import tldextract
 
 # Create your views here.
@@ -147,7 +147,28 @@ signing_key = getSignatureKey(secret_key, datestamp, region, service)
 signature = hmac.new(signing_key, (string_to_sign).encode('utf-8'), hashlib.sha256).hexdigest()
 authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' +  'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature
 apikey = "Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO"
+##########################################################################################################################################################################################################
+########################################NEW QUERIES TO TEST SPEED##############################################################################################################
 
+
+canonical_querystring_speed = "Action=urlInfo&ResponseGroup=Speed" 
+canonical_querystring_speed = sortQueryString(canonical_querystring_speed)
+canonical_request_speed = method + '\n' + canonical_uri + '\n' + canonical_querystring_speed + '\n' + canonical_headers + '\n' + signed_headers + '\n' + payload_hash
+string_to_sign_speed = algorithm + '\n' +  amzdate + '\n' +  credential_scope + '\n' +  hashlib.sha256(canonical_request_speed.encode('utf-8')).hexdigest()
+signature_speed = hmac.new(signing_key, (string_to_sign_speed).encode('utf-8'), hashlib.sha256).hexdigest()
+authorization_header_speed = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' +  'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature_speed
+
+#############################################################################################################
+
+canonical_querystring_link = "Action=urlInfo&ResponseGroup=LinksInCount" 
+canonical_querystring_link = sortQueryString(canonical_querystring_link)
+canonical_request_link = method + '\n' + canonical_uri + '\n' + canonical_querystring_link + '\n' + canonical_headers + '\n' + signed_headers + '\n' + payload_hash
+string_to_sign_link = algorithm + '\n' +  amzdate + '\n' +  credential_scope + '\n' +  hashlib.sha256(canonical_request_link.encode('utf-8')).hexdigest()
+signature_link = hmac.new(signing_key, (string_to_sign_link).encode('utf-8'), hashlib.sha256).hexdigest()
+authorization_header_link = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' +  'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature_link
+
+
+######################################################################################################################################################################################
 
 def add_page(request):
     # if  request.method == 'GET':
@@ -308,46 +329,63 @@ def api_add(url):
         traffic.save()
 
 
-# @api_view(["POST"])
-# def TestPage(url):
-#     try:
-#         if type(url) != str:
-#             url = str(url)
-#         reply = requests.get(url)
-#         return JsonResponse("The status code is -", reply.status_code)
-#     except ValueError as e:
-#         return Response(e.args[0], status.HTTP_400_BAD_REQUEST)
+def api_speed(url):
+    url_check = url
 
-# def webinfo(request):
-#     content_type = 'application/xml'
-#     apikey = 'hMOokdXqvI2K7LOva7sU42YVb64oXawZ9N6ROoea'
-#     access_key = 'ASIA2TRI3LACDYYL26OK'
-#     t = datetime.utcnow()
-#     secret_key = 'feVltyVtGpxqpYFMF+ik4dusECP8y4DhA6Eyl6mM'
-#     amzdate = t.strftime('%Y%m%dT%H%M%SZ')
-#     datestamp = t.strftime('%Y%m%d') 
-#     region = 'us-east-1'
-#     service = 'execute-api'
-#     credential_scope = datestamp + '/' + region + '/' + service + '/' + 'aws4_request'
-#     signed_headers = 'host;x-amz-date'
-#     signature = 
-#     session_token = 
-#      algorithm = 'AWS4-HMAC-SHA256'
-#     authorization_header = algorithm + ' ' + 'Credential=' + access_key + '/' + credential_scope + ', ' +  'SignedHeaders=' + signed_headers + ', ' + 'Signature=' + signature
-#     if request.method == 'GET':
-#         url =  request.GET.get('site')
-#         endpoint = 'https://ats.api.alexa.com/api?'
-#         headers = {'Accept':'application/xml',
-#                'Content-Type': content_type,
-#                'X-Amz-Date':amzdate,
-#                'Authorization': authorization_header,
-#                'x-amz-security-token': session_token,
-#                'x-api-key': apikey
-#               }
-#     response = requests.get(url, headers=headers)
-#     if response.status_code == 200:
-#         result = response.json()
-#         result['success'] = True
-#     else:
-#         result['success'] = False
-#     return render(request, 'index.html', result)
+    headers = {'Accept':'application/xml',
+            'Content-Type': content_type,
+            'X-Amz-Date':amzdate,
+            'Authorization': authorization_header_speed,
+            'x-amz-security-token': session_token,
+            'x-api-key': apikey}
+    request_url = f"https://awis.api.alexa.com/api?{canonical_querystring_speed}&Url={url_check}"
+    r = requests.get(request_url, headers=headers)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    
+    try:
+        median = soup.speed.medianloadtime.get_text()
+        percentile = soup.speed.percentile.get_text()
+        result_url = soup.dataurl.get_text()
+
+    except:
+        median = "0.0"
+        percentile="0.0"
+        
+    finally:
+        page_domain = tldextract.extract(result_url).domain
+        speed_ps = Speed(page_url=result_url,page_name=page_domain,
+                median_load_time=float(median), 
+                percentile=float(percentile))
+        speed_ps_exists = Speed.objects.filter(page_url=result_url).exists()
+        if speed_ps_exists:
+            Speed.objects.filter(page_url=result_url).delete()
+        speed_ps.save()
+
+def api_count(url):
+    url_check = url
+
+    headers = {'Accept':'application/xml',
+            'Content-Type': content_type,
+            'X-Amz-Date':amzdate,
+            'Authorization': authorization_header_link,
+            'x-amz-security-token': session_token,
+            'x-api-key': apikey}
+    request_url = f"https://awis.api.alexa.com/api?{canonical_querystring_link}&Url={url_check}"
+    r = requests.get(request_url, headers=headers)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    
+    try:
+        result_url = soup.dataurl.get_text()
+        result_links_count = soup.linksincount.ger_text()
+
+    except:
+      result_links_count = '0.0'
+        
+    finally:
+        page_domain = tldextract.extract(result_url).domain
+        count = LinkCount(page_url=result_url,page_name=page_domain,
+               links_in_count=result_links_count)
+        count_exists = LinkCount.objects.filter(page_url=result_url).exists()
+        if count_exists:
+            LinkCount.objects.filter(page_url=result_url).delete()
+        count.save()

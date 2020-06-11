@@ -24,8 +24,8 @@ class Page(models.Model):
 class Speed(models.Model):
     page_url = models.URLField(max_length=300)
     page_name = models.CharField(max_length=100)
-    median_load_time = models.IntegerField(default=0)
-    percentile = models.IntegerField(default=0)
+    median_load_time = models.FloatField(default=0)
+    percentile = models.FloatField(default=0)
 
     def __str__(self):
         return self.page_name
