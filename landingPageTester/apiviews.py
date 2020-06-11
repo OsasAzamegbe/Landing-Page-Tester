@@ -3,13 +3,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
-from .models import Page
-from .serializers import landingPageSerializer
-from .views import add_page, api_add
+from .models import *
+from .serializers import *
+from .views import  *
 
 
-class PageList(generics.ListAPIView):
-    serializer_class = landingPageSerializer
+class TrafficHistory(generics.ListAPIView):
+    serializer_class = TrafficSerializer
     queryset = Page.objects.all()
     # filter_backends = [filters.DjangoFilterBackend]
     # filterset_fields = ['url']
@@ -24,12 +24,39 @@ class PageList(generics.ListAPIView):
             api_add(url)
             return queryset.filter(page_url=url)
     
+class Speed(generics.ListAPIView):
+    serializer_class = SpeedSerializer
+    queryset = Speed.objects.all()
+
+    def get_querysets(self):
+        queryset = Speed.objects.all()
+        url=self.kwargs['url']
+        speed = queryset.filter(page_url=url)
+        if speed:
+            return speed
+        else:
+            api_speed(url)
+        return queryset.filter(page_url=url)
+
+class LinkCount(generics.ListAPIView):
+    serializer_class = CountSerializer
+    queryset = LinkCount.objects.all()
+
+    def get_querysets(self):
+        queryset = LinkCount.objects.all()
+        url=self.kwargs['url']
+        link = queryset.filter(page_url=url)
+        if link:
+            return link
+        else:
+            api_link(url)
+        return queryset.filter(page_url=url)
 
     
        
-class AllPagesList(generics.ListAPIView):
+class AllTrafficList(generics.ListAPIView):
     queryset = Page.objects.all()
-    serializer_class = landingPageSerializer
+    serializer_class = TrafficSerializer
 
 # class Alexa(APIView):
 
