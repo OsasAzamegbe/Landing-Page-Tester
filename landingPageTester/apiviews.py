@@ -10,6 +10,7 @@ from .views import  api_add, api_link, api_speed
 
 
 class TrafficHistory(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = TrafficSerializer
     queryset = Page.objects.all()
     # filter_backends = [filters.DjangoFilterBackend]
@@ -26,6 +27,7 @@ class TrafficHistory(generics.ListAPIView):
             return queryset.filter(page_url=url)
     
 class SpeedApi(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = SpeedSerializer
     queryset = Speed.objects.all()
 
@@ -40,6 +42,7 @@ class SpeedApi(generics.ListAPIView):
             return queryset.filter(page_url=url_)
 
 class LinkCountApi(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = CountSerializer
     queryset = LinkCount.objects.all()
 
@@ -56,6 +59,7 @@ class LinkCountApi(generics.ListAPIView):
     
        
 class AllTrafficList(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Page.objects.all()
     serializer_class = TrafficSerializer
 
