@@ -358,7 +358,7 @@ def api_speed(url):
                 percentile=float(percentile))
         speed_ps_exists = Speed.objects.filter(page_url=url).exists()
         if speed_ps_exists:
-            Speed.objects.filter(page_url=rurl).delete()
+            Speed.objects.filter(page_url=url).delete()
         speed_ps.save()
 
 def api_link(url):
