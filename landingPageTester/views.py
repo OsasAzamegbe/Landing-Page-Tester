@@ -17,7 +17,7 @@ from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import *
+from .models import Page, Speed, LinkCount
 import tldextract
 
 # Create your views here.
@@ -272,8 +272,8 @@ def edit_url(request):
                 page_views_per_million=float(result_page_views_permillion), 
                 page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
                 reach_per_million=float(result_reach_permillion))
-            # Page.objects.get()
-            # traffic.save()
+            Page.objects.get()
+            traffic.save()
             return HttpResponseRedirect(reverse('index'))
 def index(request):
     all_pages = Page.objects.all()
@@ -306,8 +306,7 @@ def api_add(url):
     
     try:
         status_code = soup.responsestatus.statuscode.get_text()
-        rank = soup.rank.get_text()
-        result_url = soup.site.get_text()
+        rank = soup.rank.get_text()       
         result_page_views_permillion = soup.pageviews.permillion.get_text()
         result_page_views_peruser = soup.pageviews.peruser.get_text()
         result_reach_permillion = soup.reach.permillion.get_text()
@@ -316,16 +315,18 @@ def api_add(url):
         result_page_views_permillion = "0.0"
         result_page_views_peruser="0.0"
         result_reach_permillion="0.0"
+        rank="0"
+        status_code = requests.get(url).status_code
 
     finally:
-        page_domain = tldextract.extract(result_url).domain
-        traffic = Page(page_url=result_url,page_name=page_domain, page_rank=rank,
+        page_domain = tldextract.extract(url).domain
+        traffic = Page(page_url=url,page_name=page_domain, page_rank=rank,
                 page_views_per_million=float(result_page_views_permillion), 
                 page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
                 reach_per_million=float(result_reach_permillion))
-        traffic_exists = Page.objects.filter(page_url=result_url).exists()
+        traffic_exists = Page.objects.filter(page_url=url).exists()
         if traffic_exists:
-            Page.objects.filter(page_url=result_url).delete()
+            Page.objects.filter(page_url=url).delete()
         traffic.save()
 
 
@@ -345,23 +346,22 @@ def api_speed(url):
     try:
         median = soup.speed.medianloadtime.get_text()
         percentile = soup.speed.percentile.get_text()
-        result_url = soup.dataurl.get_text()
-
+  
     except:
         median = "0.0"
         percentile="0.0"
         
     finally:
-        page_domain = tldextract.extract(result_url).domain
-        speed_ps = Speed(page_url=result_url,page_name=page_domain,
+        page_domain = tldextract.extract(url).domain
+        speed_ps = Speed(page_url=url,page_name=page_domain,
                 median_load_time=float(median), 
                 percentile=float(percentile))
-        speed_ps_exists = Speed.objects.filter(page_url=result_url).exists()
+        speed_ps_exists = Speed.objects.filter(page_url=url).exists()
         if speed_ps_exists:
-            Speed.objects.filter(page_url=result_url).delete()
+            Speed.objects.filter(page_url=rurl).delete()
         speed_ps.save()
 
-def api_count(url):
+def api_link(url):
     url_check = url
 
     headers = {'Accept':'application/xml',
@@ -375,17 +375,16 @@ def api_count(url):
     soup = BeautifulSoup(r.text, 'html.parser')
     
     try:
-        result_url = soup.dataurl.get_text()
-        result_links_count = soup.linksincount.ger_text()
+        result_links_count = soup.linksincount.get_text()
 
     except:
       result_links_count = '0.0'
         
     finally:
-        page_domain = tldextract.extract(result_url).domain
-        count = LinkCount(page_url=result_url,page_name=page_domain,
+        page_domain = tldextract.extract(url).domain
+        count = LinkCount(page_url=url,page_name=page_domain,
                links_in_count=result_links_count)
-        count_exists = LinkCount.objects.filter(page_url=result_url).exists()
+        count_exists = LinkCount.objects.filter(page_url=url).exists()
         if count_exists:
-            LinkCount.objects.filter(page_url=result_url).delete()
+                    LinkCount.objects.filter(page_url=url).delete()
         count.save()

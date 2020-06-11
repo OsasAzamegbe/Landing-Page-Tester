@@ -2,10 +2,11 @@ from rest_framework import  status,generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 from django_filters import rest_framework as filters
 from .models import *
 from .serializers import *
-from .views import  *
+from .views import  api_add, api_link, api_speed
 
 
 class TrafficHistory(generics.ListAPIView):
@@ -24,25 +25,25 @@ class TrafficHistory(generics.ListAPIView):
             api_add(url)
             return queryset.filter(page_url=url)
     
-class Speed(generics.ListAPIView):
+class SpeedApi(generics.ListAPIView):
     serializer_class = SpeedSerializer
     queryset = Speed.objects.all()
 
-    def get_querysets(self):
+    def get_queryset(self):
         queryset = Speed.objects.all()
-        url=self.kwargs['url']
-        speed = queryset.filter(page_url=url)
+        url_=self.kwargs['url']
+        speed = queryset.filter(page_url=url_)
         if speed:
             return speed
         else:
-            api_speed(url)
-        return queryset.filter(page_url=url)
+            api_speed(url_)
+            return queryset.filter(page_url=url_)
 
-class LinkCount(generics.ListAPIView):
+class LinkCountApi(generics.ListAPIView):
     serializer_class = CountSerializer
     queryset = LinkCount.objects.all()
 
-    def get_querysets(self):
+    def get_queryset(self):
         queryset = LinkCount.objects.all()
         url=self.kwargs['url']
         link = queryset.filter(page_url=url)
@@ -50,7 +51,7 @@ class LinkCount(generics.ListAPIView):
             return link
         else:
             api_link(url)
-        return queryset.filter(page_url=url)
+            return queryset.filter(page_url=url)
 
     
        

@@ -1,13 +1,13 @@
 from django.urls import path,include
 from django.conf.urls import url
-from .apiviews import *
+from .apiviews import TrafficHistory, SpeedApi, LinkCountApi, AllTrafficList
 
 app_name = 'landingPageTester'
 
 urlpatterns = [
-    path('traffic/page/<str:url>', TrafficHistory.as_view(), name='traffic'),
-    path('speed/page/<str:url>', Speed.as_view(), name='speed'),
-    path('count/page/<str:url>', LinkCount.as_view(), name='count'),
+    path('traffic/page/<path:url>', TrafficHistory.as_view(), name='traffic'),
+    path('speed/page/<path:url>', SpeedApi.as_view(), name='speed'),
+    path('count/page/<path:url>', LinkCountApi.as_view(), name='count'),
     path('all/', AllTrafficList.as_view(), name='all')
 ]
 
