@@ -8,7 +8,7 @@ from .serializers import landingPageSerializer
 from .views import add_page, api_add
 
 
-class PageList(generics.ListAPIView):
+class TrafficHistory(generics.ListAPIView):
     serializer_class = landingPageSerializer
     queryset = Page.objects.all()
     # filter_backends = [filters.DjangoFilterBackend]

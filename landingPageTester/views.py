@@ -169,13 +169,20 @@ def add_page(request):
         result_url = soup.site.get_text()
         try:
             result_page_views_permillion = soup.pageviews.permillion.get_text()
+            result_page_views_peruser = soup.pageviews.peruser.get_text()
+            result_reach_permillion = soup.reach.permillion.get_text()
  
         except:
             result_page_views_permillion = "0.0"
+            result_page_views_peruser="0.0"
+            result_reach_permillion="0.0"
 
         finally:
             page_domain = tldextract.extract(result_url).domain
-            traffic = Page(page_url=result_url, page_name=page_domain, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+            traffic = Page(page_url=result_url,page_name=page_domain, page_rank=rank,
+                page_views_per_million=float(result_page_views_permillion), 
+                page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
+                reach_per_million=float(result_reach_permillion))
             traffic_exists = Page.objects.filter(page_url=result_url).exists()
             if traffic_exists:
                 Page.objects.filter(page_url=result_url).delete()
@@ -229,15 +236,21 @@ def edit_url(request):
         result_url = soup.site.get_text()
         try:
             result_page_views_permillion = soup.pageviews.permillion.get_text()
+            result_page_views_peruser = soup.pageviews.peruser.get_text()
+            result_reach_permillion = soup.reach.permillion.get_text()
         
         except:
             result_page_views_permillion = "0.0"
+            result_page_views_peruser="0.0"
+            result_reach_permillion="0.0"
         
         finally:
             page_domain = tldextract.extract(result_url).domain
 
-            traffic = Page.objects.filter(page_url=url_check).update(page_url=result_url, page_name=page_domain,page_traffic=float(result_page_views_permillion),
-                           page_status=int(status_code), page_rank=rank)
+            traffic = traffic = Page.objects.filter(page_url=result_url).update(page_url=result_url,page_name=page_domain, page_rank=rank,
+                page_views_per_million=float(result_page_views_permillion), 
+                page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
+                reach_per_million=float(result_reach_permillion))
             # Page.objects.get()
             # traffic.save()
             return HttpResponseRedirect(reverse('index'))
@@ -275,13 +288,20 @@ def api_add(url):
         rank = soup.rank.get_text()
         result_url = soup.site.get_text()
         result_page_views_permillion = soup.pageviews.permillion.get_text()
+        result_page_views_peruser = soup.pageviews.peruser.get_text()
+        result_reach_permillion = soup.reach.permillion.get_text()
 
     except:
         result_page_views_permillion = "0.0"
+        result_page_views_peruser="0.0"
+        result_reach_permillion="0.0"
 
     finally:
         page_domain = tldextract.extract(result_url).domain
-        traffic = Page(page_url=result_url, page_name=page_domain, page_traffic=float(result_page_views_permillion), page_status=int(status_code),page_rank=rank)
+        traffic = Page(page_url=result_url,page_name=page_domain, page_rank=rank,
+                page_views_per_million=float(result_page_views_permillion), 
+                page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
+                reach_per_million=float(result_reach_permillion))
         traffic_exists = Page.objects.filter(page_url=result_url).exists()
         if traffic_exists:
             Page.objects.filter(page_url=result_url).delete()
