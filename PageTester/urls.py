@@ -26,7 +26,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title='Landing Page Tester',
         default_version='v1',
-        description='Test',
+        description='Microservice for Testing Landing Pages',
         terms_of_service='https://www.google.com/policies/terms/',
         contact=openapi.Contact(email='contact@snippets.local'),
         license=openapi.License(name='BSD License')
@@ -47,6 +47,6 @@ urlpatterns = [
 	# path('edit_url/', LPT_views.edit_url, name='edit_url'),
 	# path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
     # path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    # re_path(r'^v1/documentation(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-  path('', include_docs_urls(title='Landing Page Tester', permission_classes=(permissions.AllowAny,)))
+    re_path(r'^v1/documentation(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('', include_docs_urls(title='Landing Page Tester', description='Microservice for Testing Various Landing Pages',permission_classes=(permissions.AllowAny,)))
 ]

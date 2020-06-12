@@ -1,6 +1,7 @@
 from rest_framework import  status,generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import permission_classes
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -12,11 +13,13 @@ from .views import  api_add, api_link, api_speed
 
 
 class TrafficHistory(generics.ListAPIView):
+    """
+    Returns Traffic History of a particular Landing Page 
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = TrafficSerializer
     queryset = Page.objects.all()
-    # filter_backends = [filters.DjangoFilterBackend]
-    # filterset_fields = ['url']
+
 
     def get_queryset(self):
         queryset = Page.objects.all()
@@ -29,6 +32,9 @@ class TrafficHistory(generics.ListAPIView):
             return queryset.filter(page_url=url)
     
 class SpeedApi(generics.ListAPIView):
+    """
+    Returns the speed data of a particular Landing Page
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = SpeedSerializer
     queryset = Speed.objects.all()
@@ -44,6 +50,9 @@ class SpeedApi(generics.ListAPIView):
             return queryset.filter(page_url=url_)
 
 class LinkCountApi(generics.ListAPIView):
+    """
+    Returns the count of links clicked to get to a particular Landing Page
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = CountSerializer
     queryset = LinkCount.objects.all()
@@ -61,6 +70,10 @@ class LinkCountApi(generics.ListAPIView):
     
        
 class AllTrafficList(generics.ListAPIView):
+    """
+    Returns a list of all Landing Pages traffic in our database.
+    If you can't find what you are looking for, get it via the traffic end point
+    """
     permission_classes = (IsAuthenticated,)
     queryset = Page.objects.all()
     serializer_class = TrafficSerializer
@@ -70,6 +83,10 @@ def doc_json(request):
     return HttpResponseRedirect('/v1/documentation.json')
 
 
+
+
+
+@permission_classes((AllowAny, ))
 class CreateUserApi(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
     def create(self, request, *args, **kwargs):     
