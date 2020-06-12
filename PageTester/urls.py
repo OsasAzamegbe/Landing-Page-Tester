@@ -18,6 +18,7 @@ from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework.documentation import include_docs_urls
 from landingPageTester import views as LPT_views
 from django.urls import path, re_path
 
@@ -45,7 +46,7 @@ urlpatterns = [
     # path('manage/<int:pk>/', LPT_views.manage, name='manage'),
 	# path('edit_url/', LPT_views.edit_url, name='edit_url'),
 	# path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),    
-    re_path(r'^v1/documentation(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-  
+    # path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    # re_path(r'^v1/documentation(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+  path('', include_docs_urls(title='Landing Page Tester', permission_classes=(permissions.AllowAny,)))
 ]
