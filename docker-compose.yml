@@ -13,14 +13,14 @@ services:
           - db
       ports: 
         - "8080:8080"
-      command: python manage.py runserver 0.0.0.0:10550
+      command: python manage.py runserver 0.0.0.0:8080
 
   db:
       image: postgres
       restart: unless-stopped
       expose:
         - "5432"
-      environment:   # will be used by the init script
+      environment:   
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: postgres
@@ -36,7 +36,7 @@ services:
         - static:/code/static_cdn
         - media:/code/media_cdn
       ports: 
-        - "1221:10"
+        - "1221:80"
       links:
         - web  
 volumes:
