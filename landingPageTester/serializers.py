@@ -15,3 +15,8 @@ class CountSerializer(serializers.ModelSerializer):
     class Meta:
         model = LinkCount
         fields = '__all__'
+
+class ConfigureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConfigureDetails
+        fields = '__all__'

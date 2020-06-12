@@ -16,6 +16,7 @@ urlpatterns = [
     path('alltraffic/', AllTrafficList.as_view(), name='all'),
     path('api-token-auth/', obtain_auth_token, name='api-token-auth'),
     path('documentation/', doc_json, name='documentation'),
+    path('configure/', ConfigureDetailsApi.as_view(), name='configuration'),
 ]
 
 # Q3rj7tG54k7EWUjZKt3Yg5lcso1jobNw7ALYRTcO
