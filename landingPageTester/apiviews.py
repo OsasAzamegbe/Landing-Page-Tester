@@ -82,8 +82,20 @@ def doc_json(request):
     return HttpResponseRedirect('/v1/documentation.json')
 
 
+class CreateUserApi(generics.CreateAPIView):
+    serializer_class = CreateUserSerializer
+    def create(self, request, *args, **kwargs):     
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+
 class ConfigureDetailsApi(APIView):
- 
+    serializer_class = ConfigureSerializer
+
     def get_object(self, company_id):
         try:
             return ConfigureDetails.objects.get(company_id=company_id)
