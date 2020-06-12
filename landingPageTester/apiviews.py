@@ -70,6 +70,16 @@ def doc_json(request):
     return HttpResponseRedirect('/v1/documentation.json')
 
 
+class CreateUserApi(APIView):
+    def post(self, request):
+        serializer = CreateUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class ConfigureDetailsApi(APIView):
  
     def get_object(self, company_id):
