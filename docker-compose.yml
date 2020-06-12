@@ -20,7 +20,7 @@ services:
       restart: unless-stopped
       expose:
         - "5432"
-      environment:   # will be used by the init script
+      environment:   
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: postgres
