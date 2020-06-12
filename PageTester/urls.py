@@ -55,7 +55,7 @@ urlpatterns = [
     or via a testing tool like Postman or via the Command Line using httpie.
     If testing via Postman add your Token to the header Key = Authorization,Value = Token <your token>.
     If testing using httpie always add 'Authorization: Token <your token>' after each end point.
-    To test here go to Authentication in the side bar ,click on token. Fill in the Bearer field with 'Token'then API key field with your generated token.
+    To test here go to Authentication in the side bar ,click on token. Fill in the Bearer field with 'Token' then the API key field with your generated token.
     You are good to go.
                                    
 """
