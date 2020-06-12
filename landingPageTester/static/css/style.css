@@ -1,0 +1,5 @@
+$('#element').css({
+margin: "5px",
+padding: "10px",
+color: "black"
+});
