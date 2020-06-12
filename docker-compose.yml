@@ -12,8 +12,8 @@ services:
       depends_on: 
           - db
       ports: 
-        - "8000:8000"
-      command: python manage.py runserver 0.0.0.0:8000
+        - "10550:10550"
+      command: python manage.py runserver 0.0.0.0:10550
 
   db:
       image: postgres
@@ -36,7 +36,7 @@ services:
         - static:/code/static_cdn
         - media:/code/media_cdn
       ports: 
-        - "1221:80"
+        - "1221:10"
       links:
         - web  
 volumes:
