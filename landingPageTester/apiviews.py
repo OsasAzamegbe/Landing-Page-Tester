@@ -104,10 +104,7 @@ class CreateUserApi(generics.CreateAPIView):
 
 
 class ConfigureDetailsApi(generics.CreateAPIView):
-    """
-    Register here to get tour apikeys. After registering go to api-token-auth on the docpage to get 
-    your token or via the CL '/api-token-auth/ username=   password='
-    """
+   
     serializer_class = ConfigureSerializer
 
     def get_object(self, company_id):
