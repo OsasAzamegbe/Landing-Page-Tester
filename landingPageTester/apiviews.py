@@ -1,6 +1,7 @@
 from rest_framework import  status,generics
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import permission_classes
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -82,6 +83,10 @@ def doc_json(request):
     return HttpResponseRedirect('/v1/documentation.json')
 
 
+
+
+
+@permission_classes((AllowAny, ))
 class CreateUserApi(generics.CreateAPIView):
     serializer_class = CreateUserSerializer
     def create(self, request, *args, **kwargs):     
