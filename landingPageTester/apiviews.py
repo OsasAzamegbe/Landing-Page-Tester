@@ -98,7 +98,7 @@ class CreateUserApi(generics.CreateAPIView):
 
 
 
-class ConfigureDetailsApi(APIView):
+class ConfigureDetailsApi(generics.CreateAPIView):
     serializer_class = ConfigureSerializer
 
     def get_object(self, company_id):
