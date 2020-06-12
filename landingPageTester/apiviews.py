@@ -14,7 +14,7 @@ from .views import  api_add, api_link, api_speed
 
 class TrafficHistory(generics.ListAPIView):
     """
-    Returns Traffic History of a particular Landing Page 
+    Returns Traffic History of a particular Landing Page. 
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = TrafficSerializer
@@ -33,7 +33,7 @@ class TrafficHistory(generics.ListAPIView):
     
 class SpeedApi(generics.ListAPIView):
     """
-    Returns the speed data of a particular Landing Page
+    Returns the speed data of a particular Landing Page. 
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = SpeedSerializer
@@ -72,6 +72,8 @@ class LinkCountApi(generics.ListAPIView):
 class AllTrafficList(generics.ListAPIView):
     """
     Returns a list of all Landing Pages traffic in our database.
+
+
     If you can't find what you are looking for, get it via the traffic end point
     """
     permission_classes = (IsAuthenticated,)
@@ -88,6 +90,9 @@ def doc_json(request):
 
 @permission_classes((AllowAny, ))
 class CreateUserApi(generics.CreateAPIView):
+    """
+    Register here to be able to get access to your token
+    """
     serializer_class = CreateUserSerializer
     def create(self, request, *args, **kwargs):     
         serializer = self.get_serializer(data=request.data)
@@ -99,6 +104,10 @@ class CreateUserApi(generics.CreateAPIView):
 
 
 class ConfigureDetailsApi(generics.CreateAPIView):
+    """
+    Register here to get tour apikeys. After registering go to api-token-auth on the docpage to get 
+    your token or via the CL '/api-token-auth/ username=   password='
+    """
     serializer_class = ConfigureSerializer
 
     def get_object(self, company_id):
