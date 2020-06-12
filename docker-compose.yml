@@ -1,0 +1,45 @@
+version: '3'
+services:
+
+  web:
+
+      build: .
+      container_name: great
+      volumes: 
+      - .:/code
+      - static:/code/static_cdn
+      - media:/code/media_cdn
+      depends_on: 
+          - db
+      ports: 
+        - "8080:8080"
+      command: python manage.py runserver 0.0.0.0:10550
+
+  db:
+      image: postgres
+      restart: unless-stopped
+      expose:
+        - "5432"
+      environment:   # will be used by the init script
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+      volumes:
+          - pgdata:/var/lib/postgresql/data/  
+
+  nginx:
+      restart: always
+      build: ./nginx/
+      volumes: 
+        - ./nginx/:/etc/nginx/conf.d
+        - ./logs/:/code/logs
+        - static:/code/static_cdn
+        - media:/code/media_cdn
+      ports: 
+        - "1221:10"
+      links:
+        - web  
+volumes:
+  pgdata:
+  media:
+  static: 
