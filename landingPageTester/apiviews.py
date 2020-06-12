@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from django_filters import rest_framework as filters
+from rest_framework.views import APIView
 from .models import *
 from .serializers import *
 from .views import  api_add, api_link, api_speed
@@ -64,5 +65,31 @@ class AllTrafficList(generics.ListAPIView):
     queryset = Page.objects.all()
     serializer_class = TrafficSerializer
 
+
 def doc_json(request):
     return HttpResponseRedirect('/v1/documentation.json')
+
+
+class ConfigureDetailsApi(APIView):
+ 
+    def get_object(self, company_id):
+        try:
+            return ConfigureDetails.objects.get(company_id=company_id)
+        except ConfigureDetails.DoesNotExist:
+            raise Http404
+ 
+    def post(self, request):
+        serializer = ConfigureSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
+    def put(self, request):
+        company_id = request.data['company_id']
+        config_detail = self.get_object(company_id)
+        serializer = ConfigureSerializer(config_detail, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

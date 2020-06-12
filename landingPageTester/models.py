@@ -37,3 +37,12 @@ class LinkCount(models.Model):
 
     def __str__(self):
         return self.page_name
+
+
+class ConfigureDetails(models.Model):
+    company_id = models.CharField(max_length=300)
+    company_format = models.CharField(max_length=300)
+    token = models.CharField(max_length=300)
+ 
+    def __str__(self):
+        return self.company_id
