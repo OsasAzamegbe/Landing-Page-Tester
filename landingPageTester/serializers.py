@@ -27,3 +27,9 @@ class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+    def save(self):
+        user, created = User.objects.get_or_create(username=self.validated_data['username'])
+        if created:
+            user.set_password(self.validated_data['password'])
+            user.save()
