@@ -33,7 +33,7 @@ class TrafficHistory(generics.ListAPIView):
     
 class SpeedApi(generics.ListAPIView):
     """
-    Returns the speed data of a particular Landing Page
+    Returns the speed data of a particular Landing Page.
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = SpeedSerializer
@@ -51,7 +51,7 @@ class SpeedApi(generics.ListAPIView):
 
 class LinkCountApi(generics.ListAPIView):
     """
-    Returns the count of links clicked to get to a particular Landing Page
+    Returns the count of links clicked to get to a particular Landing Page.
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = CountSerializer
@@ -72,6 +72,8 @@ class LinkCountApi(generics.ListAPIView):
 class AllTrafficList(generics.ListAPIView):
     """
     Returns a list of all Landing Pages traffic in our database.
+
+
     If you can't find what you are looking for, get it via the traffic end point
     """
     permission_classes = (IsAuthenticated,)
@@ -88,6 +90,9 @@ def doc_json(request):
 
 @permission_classes((AllowAny, ))
 class CreateUserApi(generics.CreateAPIView):
+    """
+    Register here to be able to get access to your token
+    """
     serializer_class = CreateUserSerializer
     def create(self, request, *args, **kwargs):     
         serializer = self.get_serializer(data=request.data)

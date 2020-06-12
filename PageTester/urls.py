@@ -48,5 +48,15 @@ urlpatterns = [
 	# path('get_url/<int:pk>/', LPT_views.get_url, name='get_url'),
     # path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^v1/documentation(?P<format>\.json)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    path('', include_docs_urls(title='Landing Page Tester', description='Microservice for Testing Various Landing Pages',permission_classes=(permissions.AllowAny,)))
+    path('', include_docs_urls(title='Landing Page Tester', description=
+    """Microservice for Testing Various Landing Pages.Testing is simple,
+    register below in the /v1/register/ or using httpie using the command http post then go to /api-token-auth below to get your token or alternatively
+    via the Command line  '/api-token-auth/ username=   password= ' using httpie via the command http post.Testing can be done here 
+    or via a testing tool like Postman or via the Command Line using httpie.
+    If testing via Postman add your Token to the header Key = Authorization,Value = Token <your token>.
+    If testing using httpie always add 'Authorization: Token <your token>' after each end point.
+    To test here go to Authentication in the side bar ,click on token. Fill in the Bearer field with 'Token' then the API key field with your generated token.
+    You are good to go.
+    """
+    ,permission_classes=(permissions.AllowAny,)))
 ]
