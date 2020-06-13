@@ -1,5 +1,15 @@
 # Landing-Page-Tester
-PLEASE COMMIT RESPONSIBLY
+This is a mocroservice that manages landing pages
+
+FEATURES INCLUDED 
+* Adding a landing page
+* Updating/editing landing page
+* Delete landing page
+* Get page traffic
+* Get page signup
+
+
+ALSO PLEASE COMMIT RESPONSIBLY
 HOW TO UPLOAD YOUR SCRIPTS TO GITHUB
 1. log in to your github account
 2. Once you are logged in, go to the official repository https://github.com/OsasAzamegbe/Landing-Page-Tester
