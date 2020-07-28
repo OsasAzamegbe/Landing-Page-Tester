@@ -1,5 +1,5 @@
 # Landing-Page-Tester
-This is a mocroservice that manages landing pages
+This is a microservice that manages landing pages
 
 FEATURES INCLUDED 
 * Adding a landing page
