@@ -286,7 +286,7 @@ def index(request):
 
 def manage(request, pk):
     page = Page.objects.get(id=pk)
-    speed = Speed.objects.get(id=pk)
+    # speed = Speed.objects.get(id=pk)
     context = {            
         'page': page
     }
