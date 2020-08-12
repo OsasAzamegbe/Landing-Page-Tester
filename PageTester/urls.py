@@ -24,11 +24,12 @@ urlpatterns = [
 	# path('v1/', include('landingPageTester.urls')),
     path('', LPT_views.index, name='index'),
     path('add_page/', LPT_views.add_page, name='add_page'),
-    path('get_status/', LPT_views.get_status, name='get_status'),
+	path('add_speed/', LPT_views.add_speed, name='add_speed'),
+    # path('get_status/', LPT_views.get_status, name='get_status'),
     # path('landingpagetester/', LPT_views.TestPage, name='testPage'),
-    path('delete_page/<int:pk>/', LPT_views.delete_page, name='delete_page'),
+    # path('delete_page/<int:pk>/', LPT_views.delete_page, name='delete_page'),
     path('manage/<int:pk>/', LPT_views.manage, name='manage'),
-	path('edit_url/', LPT_views.edit_url, name='edit_url'),
-	path('get_url/<int:pk>/', LPT_views.get_url, name='get_url')
+	# path('edit_url/', LPT_views.edit_url, name='edit_url'),
+	# path('get_url/<int:pk>/', LPT_views.get_url, name='get_url')
 ]
                                

@@ -1,4 +1,5 @@
-import base64, hashlib, hmac, os
+import base64, hashlib, hmac, os, sys
+from multiprocessing import Process
 import logging, getopt
 import boto3
 import getpass
@@ -211,69 +212,70 @@ def add_page(request):
         return HttpResponseRedirect(reverse('index'))
 
 
-def get_url(request,pk):
-    get_url = Page.objects.get(id=pk)
-    context = {
-        'url':get_url
-    }
-    return render(request, 'edit.html', context)
-def get_status(request):
-    if  request.method == 'GET':
-        return render(request, 'index.html')
-    if request.method == 'POST':
-        url_check = request.POST.get('url')
-    Page = Page.objects.filter(page_url=url_check)
-    status = Page.page_status
-    context= {
-        'status': status
-    }
-    return render(request, 'status.html', context)    
+# def get_url(request,pk):
+#     get_url = Page.objects.get(id=pk)
+#     context = {
+#         'url':get_url
+#     }
+#     return render(request, 'edit.html', context)
+# def get_status(request):
+#     if  request.method == 'GET':
+#         return render(request, 'index.html')
+#     if request.method == 'POST':
+#         url_check = request.POST.get('url')
+#     Page = Page.objects.filter(page_url=url_check)
+#     status = Page.page_status
+#     context= {
+#         'status': status
+#     }
+#     return render(request, 'status.html', context)    
 
             
-def delete_page(request, pk):    
-    if request.method == 'POST':
-        delete_urls= Page.objects.get(id=pk)
-        delete_urls.delete()
-    return HttpResponseRedirect(reverse('index'))
+# def delete_page(request, pk):    
+#     if request.method == 'POST':
+#         delete_urls= Page.objects.get(id=pk)
+#         delete_urls.delete()
+#     return HttpResponseRedirect(reverse('index'))
     
-def edit_url(request):
-    if request.method == 'GET':
-        return render(request, 'edit.html')
+# def edit_url(request):
+#     if request.method == 'GET':
+#         return render(request, 'edit.html')
     
-    if request.method == 'POST':
-        url_check = request.POST.get('url')
+#     if request.method == 'POST':
+#         url_check = request.POST.get('url')
         
-        headers = {'Accept': 'application/xml',
-                   'Content-Type': content_type,
-                   'X-Amz-Date': amzdate,
-                   'Authorization': authorization_header,
-                   'x-amz-security-token': session_token,
-                   'x-api-key': apikey}
-        request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
-        r = requests.get(request_url, headers=headers)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        status_code = soup.responsestatus.statuscode.get_text()
-        rank = soup.rank.get_text()
-        result_url = soup.site.get_text()
-        try:
-            result_page_views_permillion = soup.pageviews.permillion.get_text()
-            result_page_views_peruser = soup.pageviews.peruser.get_text()
-            result_reach_permillion = soup.reach.permillion.get_text()
+#         headers = {'Accept': 'application/xml',
+#                    'Content-Type': content_type,
+#                    'X-Amz-Date': amzdate,
+#                    'Authorization': authorization_header,
+#                    'x-amz-security-token': session_token,
+#                    'x-api-key': apikey}
+#         request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
+#         r = requests.get(request_url, headers=headers)
+#         soup = BeautifulSoup(r.text, 'html.parser')
+#         status_code = soup.responsestatus.statuscode.get_text()
+#         rank = soup.rank.get_text()
+#         result_url = soup.site.get_text()
+#         try:
+#             result_page_views_permillion = soup.pageviews.permillion.get_text()
+#             result_page_views_peruser = soup.pageviews.peruser.get_text()
+#             result_reach_permillion = soup.reach.permillion.get_text()
         
-        except:
-            result_page_views_permillion = "0.0"
-            result_page_views_peruser="0.0"
-            result_reach_permillion="0.0"
+#         except:
+#             result_page_views_permillion = "0.0"
+#             result_page_views_peruser="0.0"
+#             result_reach_permillion="0.0"
         
-        finally:
-            page_domain = tldextract.extract(result_url).domain
-            traffic = traffic = Page.objects.filter(page_url=result_url).update(page_url=result_url,page_name=page_domain, page_rank=rank,
-                page_views_per_million=float(result_page_views_permillion), 
-                page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
-                reach_per_million=float(result_reach_permillion))
-            Page.objects.get()
-            traffic.save()
-            return HttpResponseRedirect(reverse('index'))
+#         finally:
+#             page_domain = tldextract.extract(result_url).domain
+#             traffic = traffic = Page.objects.filter(page_url=result_url).update(page_url=result_url,page_name=page_domain, page_rank=rank,
+#                 page_views_per_million=float(result_page_views_permillion), 
+#                 page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
+#                 reach_per_million=float(result_reach_permillion))
+#             Page.objects.get()
+#             traffic.save()
+#             return HttpResponseRedirect(reverse('index'))
+
 def index(request):
     all_pages = Page.objects.all()
     context = {            
@@ -284,13 +286,15 @@ def index(request):
 
 def manage(request, pk):
     page = Page.objects.get(id=pk)
+    speed = Speed.objects.get(id=pk)
     context = {            
         'page': page
     }
     return render(request, 'manage.html', context)
   
-def api_speed(url):
-    url_check = url
+def add_speed(request):
+    if request.method == 'POST':
+        url = request.POST.get('url')
 
     headers = {'Accept':'application/xml',
             'Content-Type': content_type,
@@ -319,6 +323,7 @@ def api_speed(url):
         if speed_ps_exists:
             Speed.objects.filter(page_url=url).delete()
         speed_ps.save()
+        return HttpResponseRedirect(reverse('index'))
 
 def api_link(url):
     url_check = url
@@ -347,3 +352,10 @@ def api_link(url):
         if count_exists:
                     LinkCount.objects.filter(page_url=url).delete()
         count.save()
+
+
+# if __name__ == '__main__':
+#     p1 = Process(target=add_page())
+#     p1.start()
+#     p2= Process(target=add_speed())
+#     p2.start()
