@@ -1,1 +1,1 @@
-web: gunicorn landing-page-tester.wsgi --log-file -
+web: gunicorn PageTester.wsgi --log-file -
