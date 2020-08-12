@@ -13,11 +13,12 @@ from django.http import Http404, JsonResponse, HttpResponseRedirect
 from django.core import serializers
 from django.conf import settings
 from django.urls import reverse
+# from . import credentials
 from datetime import datetime
 import json
 from bs4 import BeautifulSoup
 import requests
-from .models import Page, Speed, LinkCount
+from .models import *
 import tldextract
 
 # Create your views here.
@@ -192,7 +193,6 @@ def add_page(request):
             result_page_views_permillion = soup.pageviews.permillion.get_text()
             result_page_views_peruser = soup.pageviews.peruser.get_text()
             result_reach_permillion = soup.reach.permillion.get_text()
- 
         except:
             result_page_views_permillion = "0.0"
             result_page_views_peruser="0.0"
@@ -267,7 +267,6 @@ def edit_url(request):
         
         finally:
             page_domain = tldextract.extract(result_url).domain
-
             traffic = traffic = Page.objects.filter(page_url=result_url).update(page_url=result_url,page_name=page_domain, page_rank=rank,
                 page_views_per_million=float(result_page_views_permillion), 
                 page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
@@ -290,46 +289,6 @@ def manage(request, pk):
     }
     return render(request, 'manage.html', context)
   
-  
-def api_add(url):
-    url_check = url
-
-    headers = {'Accept':'application/xml',
-            'Content-Type': content_type,
-            'X-Amz-Date':amzdate,
-            'Authorization': authorization_header,
-            'x-amz-security-token': session_token,
-            'x-api-key': apikey}
-    request_url = f"https://awis.api.alexa.com/api?{canonical_querystring}&Url={url_check}"
-    r = requests.get(request_url, headers=headers)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    
-    try:
-        status_code = soup.responsestatus.statuscode.get_text()
-        rank = soup.rank.get_text()       
-        result_page_views_permillion = soup.pageviews.permillion.get_text()
-        result_page_views_peruser = soup.pageviews.peruser.get_text()
-        result_reach_permillion = soup.reach.permillion.get_text()
-
-    except:
-        result_page_views_permillion = "0.0"
-        result_page_views_peruser="0.0"
-        result_reach_permillion="0.0"
-        rank="0"
-        status_code = requests.get(url).status_code
-
-    finally:
-        page_domain = tldextract.extract(url).domain
-        traffic = Page(page_url=url,page_name=page_domain, page_rank=rank,
-                page_views_per_million=float(result_page_views_permillion), 
-                page_views_per_user=float(result_page_views_peruser), page_status=int(status_code),
-                reach_per_million=float(result_reach_permillion))
-        traffic_exists = Page.objects.filter(page_url=url).exists()
-        if traffic_exists:
-            Page.objects.filter(page_url=url).delete()
-        traffic.save()
-
-
 def api_speed(url):
     url_check = url
 
