@@ -38,4 +38,4 @@ soupsieve==2.0.1
 sqlparse==0.3.1
 tldextract==2.2.2
 uritemplate==3.0.1
-urllib3==1.25.9
+urllib3==1.26.5
